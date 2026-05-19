@@ -9,6 +9,26 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
+  <!-- ─── Password gate — runs synchronously before first paint ── -->
+  <script>
+    (function () {
+      const KEY = 'ds_auth';
+      const PWD = 'deckside2026';
+      if (sessionStorage.getItem(KEY) !== PWD) {
+        // Block the page from rendering anything until auth passes.
+        document.addEventListener('DOMContentLoaded', function () {
+          document.getElementById('pw-gate').style.display = 'flex';
+          document.getElementById('loading').style.display  = 'none';
+        });
+      } else {
+        // Already authenticated this session — skip gate, let dashboard load.
+        document.addEventListener('DOMContentLoaded', function () {
+          document.getElementById('pw-gate').style.display = 'none';
+        });
+      }
+    })();
+  </script>
+
   <style>
     /* ─── Base ───────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,6 +52,87 @@
       font-family: 'Instrument Sans', sans-serif;
       line-height: 1.5;
       min-height: 100vh;
+    }
+
+    /* ─── Password Gate ─────────────────────────────────────── */
+    #pw-gate {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 16px;
+      padding: 24px;
+    }
+
+    #pw-gate h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+    }
+
+    #pw-gate p {
+      font-size: 14px;
+      color: var(--gray);
+    }
+
+    .pw-row {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    #pw-input {
+      flex: 1;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 15px;
+      color: var(--navy);
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: 8px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    #pw-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+    }
+
+    #pw-input.shake {
+      animation: shake 0.35s ease;
+      border-color: #EF4444;
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-6px); }
+      60%      { transform: translateX(6px); }
+    }
+
+    #pw-submit {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 11px 20px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    #pw-submit:hover { opacity: 0.85; }
+
+    #pw-error {
+      font-size: 13px;
+      color: #EF4444;
+      min-height: 18px;
     }
 
     /* ─── Loading ────────────────────────────────────────────── */
@@ -349,6 +450,17 @@
   </style>
 </head>
 <body>
+
+  <!-- ─── Password Gate ────────────────────────────────────── -->
+  <div id="pw-gate" style="display:none">
+    <h2>Deckside Results</h2>
+    <p>Enter the password to view survey responses.</p>
+    <div class="pw-row">
+      <input id="pw-input" type="password" placeholder="Password" autocomplete="current-password" />
+      <button id="pw-submit">Unlock</button>
+    </div>
+    <div id="pw-error"></div>
+  </div>
 
   <!-- ─── Loading ───────────────────────────────────────────── -->
   <div id="loading">
@@ -730,9 +842,44 @@
       }
     }
 
+    /* ── Password gate logic ────────────────────────────────── */
+    const KEY = 'ds_auth';
+    const PWD = 'deckside2026';
+
+    function unlockDashboard() {
+      $('pw-gate').style.display  = 'none';
+      $('loading').style.display  = 'flex';
+      fetchAndRender();
+    }
+
+    function handlePwSubmit() {
+      const input = $('pw-input');
+      if (input.value === PWD) {
+        sessionStorage.setItem(KEY, PWD);
+        unlockDashboard();
+      } else {
+        $('pw-error').textContent = 'Incorrect password.';
+        input.value = '';
+        input.classList.remove('shake');
+        // Force reflow so the animation re-triggers if they keep trying
+        void input.offsetWidth;
+        input.classList.add('shake');
+        input.addEventListener('animationend', () => input.classList.remove('shake'), { once: true });
+        input.focus();
+      }
+    }
+
+    $('pw-submit').addEventListener('click', handlePwSubmit);
+    $('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') handlePwSubmit(); });
+
     /* ── Boot ───────────────────────────────────────────────── */
     $('refresh-btn').addEventListener('click', fetchAndRender);
-    fetchAndRender();
+
+    if (sessionStorage.getItem(KEY) === PWD) {
+      // Already authenticated this session — go straight to data
+      unlockDashboard();
+    }
+    // Otherwise the gate is shown by the inline <script> in <head>
   </script>
 
 </body>
