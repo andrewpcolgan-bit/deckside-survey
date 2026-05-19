@@ -77,12 +77,15 @@
     }
 
     .nav-wordmark {
-      font-family: 'Instrument Sans', sans-serif;
-      font-weight: 700;
-      font-size: 18px;
-      color: var(--navy);
+      display: flex;
+      align-items: center;
       text-decoration: none;
-      letter-spacing: -0.02em;
+    }
+
+    .nav-wordmark img {
+      height: 36px;
+      width: auto;
+      display: block;
     }
 
     .nav-cta {
@@ -542,11 +545,9 @@
     }
 
     .footer-wordmark {
-      font-family: 'Instrument Sans', sans-serif;
-      font-weight: 700;
-      font-size: 16px;
-      color: var(--navy);
-      letter-spacing: -0.02em;
+      height: 24px;
+      width: auto;
+      display: block;
     }
 
     .footer-credit {
@@ -568,6 +569,10 @@
     @media (max-width: 768px) {
       nav {
         padding: 18px 24px;
+      }
+
+      .nav-wordmark img {
+        height: 28px;
       }
 
       #hero {
@@ -605,7 +610,7 @@
 
   <!-- ─── Nav ──────────────────────────────────────────────── -->
   <nav id="main-nav">
-    <a href="#" class="nav-wordmark">Deckside</a>
+    <a href="#" class="nav-wordmark"><img src="logo.png" alt="Deckside" /></a>
     <a href="#survey" class="nav-cta">Take the Survey</a>
   </nav>
 
@@ -1062,7 +1067,7 @@
 
   <!-- ─── Footer ────────────────────────────────────────────── -->
   <footer>
-    <span class="footer-wordmark">Deckside</span>
+    <img src="logo.png" alt="Deckside" class="footer-wordmark" />
     <span class="footer-credit">Built by Andrew Colgan · Colorado College · 2026</span>
   </footer>
 
