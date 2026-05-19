@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,18 +8,19 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
 
   <!-- ─── Password gate — runs synchronously before first paint ── -->
   <script>
     (function () {
       const KEY = 'ds_auth';
-      const PWD = 'deckside2026';
+      const PWD = 'Pakoras358';
       if (sessionStorage.getItem(KEY) !== PWD) {
         // Block the page from rendering anything until auth passes.
         document.addEventListener('DOMContentLoaded', function () {
           document.getElementById('pw-gate').style.display = 'flex';
-          document.getElementById('loading').style.display  = 'none';
+          document.getElementById('loading').style.display = 'none';
         });
       } else {
         // Already authenticated this session — skip gate, let dashboard load.
@@ -31,19 +33,25 @@
 
   <style>
     /* ─── Base ───────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
-      --bg:         #F7F5F2;
-      --navy:       #1A1F2E;
-      --accent:     #2563EB;
-      --accent-lt:  #DBEAFE;
-      --gray:       #6B7280;
+      --bg: #F7F5F2;
+      --navy: #1A1F2E;
+      --accent: #2563EB;
+      --accent-lt: #DBEAFE;
+      --gray: #6B7280;
       --light-gray: #E5E7EB;
-      --white:      #FFFFFF;
-      --green:      #10B981;
-      --amber:      #F59E0B;
-      --red-muted:  #9CA3AF;
+      --white: #FFFFFF;
+      --green: #10B981;
+      --amber: #F59E0B;
+      --red-muted: #9CA3AF;
     }
 
     body {
@@ -99,7 +107,7 @@
 
     #pw-input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
     #pw-input.shake {
@@ -108,9 +116,19 @@
     }
 
     @keyframes shake {
-      0%,100% { transform: translateX(0); }
-      20%      { transform: translateX(-6px); }
-      60%      { transform: translateX(6px); }
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-6px);
+      }
+
+      60% {
+        transform: translateX(6px);
+      }
     }
 
     #pw-submit {
@@ -127,7 +145,9 @@
       white-space: nowrap;
     }
 
-    #pw-submit:hover { opacity: 0.85; }
+    #pw-submit:hover {
+      opacity: 0.85;
+    }
 
     #pw-error {
       font-size: 13px;
@@ -156,7 +176,11 @@
       animation: spin 0.8s linear infinite;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     #error-state {
       display: none;
@@ -171,7 +195,10 @@
       padding: 24px;
     }
 
-    #error-state strong { color: var(--navy); font-size: 18px; }
+    #error-state strong {
+      color: var(--navy);
+      font-size: 18px;
+    }
 
     /* ─── Page Header ────────────────────────────────────────── */
     .page-header {
@@ -193,13 +220,13 @@
 
     .header-meta {
       font-size: 13px;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255, 255, 255, 0.5);
     }
 
     .btn-refresh {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       color: var(--white);
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 8px;
       padding: 10px 20px;
       font-family: 'Instrument Sans', sans-serif;
@@ -210,11 +237,19 @@
       white-space: nowrap;
     }
 
-    .btn-refresh:hover { background: rgba(255,255,255,0.18); }
-    .btn-refresh:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-refresh:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .btn-refresh:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
 
     /* ─── Main Content ───────────────────────────────────────── */
-    #dashboard { display: none; }
+    #dashboard {
+      display: none;
+    }
 
     .main {
       max-width: 1100px;
@@ -300,7 +335,11 @@
     }
 
     /* ─── Bar Charts ─────────────────────────────────────────── */
-    .bar-list { display: flex; flex-direction: column; gap: 10px; }
+    .bar-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
     .bar-row {
       display: flex;
@@ -316,7 +355,9 @@
       line-height: 1.3;
     }
 
-    .bar-label.narrow { width: 160px; }
+    .bar-label.narrow {
+      width: 160px;
+    }
 
     .bar-track {
       flex: 1;
@@ -334,9 +375,17 @@
       min-width: 2px;
     }
 
-    .bar-fill.green  { background: var(--green); }
-    .bar-fill.amber  { background: var(--amber); }
-    .bar-fill.muted  { background: var(--red-muted); }
+    .bar-fill.green {
+      background: var(--green);
+    }
+
+    .bar-fill.amber {
+      background: var(--amber);
+    }
+
+    .bar-fill.muted {
+      background: var(--red-muted);
+    }
 
     .bar-count {
       width: 36px;
@@ -379,14 +428,30 @@
       margin-bottom: -1px;
     }
 
-    .tab-btn:hover { color: var(--navy); }
-    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-btn:hover {
+      color: var(--navy);
+    }
 
-    .tab-panel { display: none; padding: 24px 28px; }
-    .tab-panel.active { display: block; }
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 24px 28px;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
 
     /* ─── Response Cards ─────────────────────────────────────── */
-    .response-feed { display: flex; flex-direction: column; gap: 12px; }
+    .response-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
     .response-card {
       background: var(--bg);
@@ -432,23 +497,48 @@
       color: var(--navy);
     }
 
-    .email-table td:last-child { color: var(--gray); font-size: 13px; }
+    .email-table td:last-child {
+      color: var(--gray);
+      font-size: 13px;
+    }
 
     /* ─── Responsive ─────────────────────────────────────────── */
     @media (max-width: 900px) {
-      .page-header { padding: 20px 24px; }
-      .main { padding: 24px 20px 60px; }
-      .overview-grid { grid-template-columns: repeat(2, 1fr); }
-      .two-col { grid-template-columns: 1fr; }
-      .bar-label { width: 160px; }
+      .page-header {
+        padding: 20px 24px;
+      }
+
+      .main {
+        padding: 24px 20px 60px;
+      }
+
+      .overview-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .bar-label {
+        width: 160px;
+      }
     }
 
     @media (max-width: 600px) {
-      .overview-grid { grid-template-columns: 1fr 1fr; }
-      .page-header { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .overview-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- ─── Password Gate ────────────────────────────────────── -->
@@ -590,19 +680,19 @@
 
   <!-- ─── Firebase + Logic ───────────────────────────────────── -->
   <script type="module">
-    import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, getDocs }
       from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     /* ── Firebase init ──────────────────────────────────────── */
     const firebaseConfig = {
-      apiKey:    "AIzaSyATmi3ZAelybllb5BzSWtOTtrqEiYx1KmU",
-      authDomain:"elite-swim-c46dd.firebaseapp.com",
+      apiKey: "AIzaSyATmi3ZAelybllb5BzSWtOTtrqEiYx1KmU",
+      authDomain: "elite-swim-c46dd.firebaseapp.com",
       projectId: "elite-swim-c46dd"
     };
 
     const app = initializeApp(firebaseConfig);
-    const db  = getFirestore(app);
+    const db = getFirestore(app);
 
     /* ── Helpers ────────────────────────────────────────────── */
     const $ = id => document.getElementById(id);
@@ -668,7 +758,7 @@
     }
 
     function renderBarsQ17(counts, total) {
-      const order  = ['Yes', 'Maybe', 'No'];
+      const order = ['Yes', 'Maybe', 'No'];
       const colors = { Yes: 'green', Maybe: 'amber', No: 'muted' };
       const entries = order.filter(k => counts[k] !== undefined)
         .concat(Object.keys(counts).filter(k => !order.includes(k)))
@@ -690,13 +780,13 @@
 
     /* ── Open-ended tab config ──────────────────────────────── */
     const TABS = [
-      { id: 'q1',  label: 'Q1',  title: 'Practice Planning' },
-      { id: 'q2',  label: 'Q2',  title: 'Day Workflow'      },
-      { id: 'q7',  label: 'Q7',  title: 'Essential Tool'    },
-      { id: 'q8',  label: 'Q8',  title: 'Platform Needs'    },
-      { id: 'q11', label: 'Q11', title: 'Practice Sharing'  },
-      { id: 'q12', label: 'Q12', title: 'Fix One Thing'     },
-      { id: 'q13', label: 'Q13', title: 'Wish List'         },
+      { id: 'q1', label: 'Q1', title: 'Practice Planning' },
+      { id: 'q2', label: 'Q2', title: 'Day Workflow' },
+      { id: 'q7', label: 'Q7', title: 'Essential Tool' },
+      { id: 'q8', label: 'Q8', title: 'Platform Needs' },
+      { id: 'q11', label: 'Q11', title: 'Practice Sharing' },
+      { id: 'q12', label: 'Q12', title: 'Fix One Thing' },
+      { id: 'q13', label: 'Q13', title: 'Wish List' },
     ];
 
     /* ── Render entire dashboard ────────────────────────────── */
@@ -710,15 +800,15 @@
         : `${total} response${total !== 1 ? 's' : ''} · Last: ${fmt(latest)}`;
 
       /* ── Overview cards ─────────────────────────────────── */
-      const wantToUse  = docs.filter(d => d.q17 === 'Yes' || d.q17 === 'Maybe').length;
+      const wantToUse = docs.filter(d => d.q17 === 'Yes' || d.q17 === 'Maybe').length;
       const openContact = docs.filter(d => d.q18 === 'Yes').length;
-      const emails     = docs.filter(d => d.q19 && d.q19.trim()).length;
+      const emails = docs.filter(d => d.q19 && d.q19.trim()).length;
 
       $('overview-grid').innerHTML = [
-        { label: 'Total Responses',   value: total,       sub: '&nbsp;' },
-        { label: 'Want to Use',       value: wantToUse,   sub: total ? `${pct(wantToUse, total)} answered Yes or Maybe` : '—' },
-        { label: 'Open to Contact',   value: openContact, sub: total ? `${pct(openContact, total)} said Yes on Q18`      : '—' },
-        { label: 'Emails Collected',  value: emails,      sub: emails ? 'in the email list below' : 'none yet' },
+        { label: 'Total Responses', value: total, sub: '&nbsp;' },
+        { label: 'Want to Use', value: wantToUse, sub: total ? `${pct(wantToUse, total)} answered Yes or Maybe` : '—' },
+        { label: 'Open to Contact', value: openContact, sub: total ? `${pct(openContact, total)} said Yes on Q18` : '—' },
+        { label: 'Emails Collected', value: emails, sub: emails ? 'in the email list below' : 'none yet' },
       ].map(c => `
         <div class="card">
           <div class="card-title">${c.label}</div>
@@ -748,7 +838,7 @@
       $('chart-q18').innerHTML = renderBarsQ17(q18counts, total);
 
       /* ── Open-ended tabs ────────────────────────────────── */
-      const tabNav    = $('tab-nav');
+      const tabNav = $('tab-nav');
       const tabPanels = $('tab-panels');
 
       tabNav.innerHTML = TABS.map((t, i) => `
@@ -801,7 +891,7 @@
 
     /* ── Escape HTML ────────────────────────────────────────── */
     function escHtml(s) {
-      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
     /* ── Fetch ──────────────────────────────────────────────── */
@@ -825,19 +915,19 @@
 
         console.log(`[Deckside] Fetched ${docs.length} document(s).`, docs);
 
-        $('loading').style.display     = 'none';
+        $('loading').style.display = 'none';
         $('error-state').style.display = 'none';
-        $('dashboard').style.display   = 'block'; // ← was '' which left CSS display:none in effect
+        $('dashboard').style.display = 'block'; // ← was '' which left CSS display:none in effect
 
         render(docs);
         console.log('[Deckside] Render complete.');
       } catch (err) {
         console.error('[Deckside] Fetch error:', err);
-        $('loading').style.display     = 'none';
+        $('loading').style.display = 'none';
         $('error-state').style.display = 'flex';
-        $('error-msg').textContent     = err.message || 'Unknown error.';
+        $('error-msg').textContent = err.message || 'Unknown error.';
       } finally {
-        $('refresh-btn').disabled    = false;
+        $('refresh-btn').disabled = false;
         $('refresh-btn').textContent = '↻ Refresh Results';
       }
     }
@@ -847,8 +937,8 @@
     const PWD = 'deckside2026';
 
     function unlockDashboard() {
-      $('pw-gate').style.display  = 'none';
-      $('loading').style.display  = 'flex';
+      $('pw-gate').style.display = 'none';
+      $('loading').style.display = 'flex';
       fetchAndRender();
     }
 
@@ -883,4 +973,5 @@
   </script>
 
 </body>
+
 </html>
