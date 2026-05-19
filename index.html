@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deckside — Help Us Build It Right</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    /* ─── Reset & Base ───────────────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #F7F5F2;
+      --navy: #1A1F2E;
+      --accent: #2563EB;
+      --gray: #6B7280;
+      --light-gray: #D1D5DB;
+      --white: #FFFFFF;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--navy);
+      font-family: 'Instrument Sans', sans-serif;
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ─── Grain Texture ──────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 300px 300px;
+    }
+
+    /* ─── Nav ────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 48px;
+      transition: background-color 0.3s ease, border-bottom 0.3s ease;
+    }
+
+    nav.scrolled {
+      background-color: rgba(247, 245, 242, 0.96);
+      border-bottom: 1px solid var(--light-gray);
+      backdrop-filter: blur(6px);
+    }
+
+    .nav-wordmark {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .nav-wordmark img {
+      height: 30px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-cta {
+      font-family: 'Instrument Sans', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      opacity: 0.75;
+    }
+
+    /* ─── Hero ───────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+    }
+
+    .hero-rule {
+      width: 60px;
+      height: 2px;
+      background-color: var(--accent);
+      margin: 0 auto 40px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+      animation-delay: 0.1s;
+    }
+
+    .hero-headline {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: clamp(44px, 7vw, 80px);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--navy);
+      max-width: 820px;
+      margin: 0 auto 28px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards;
+      animation-delay: 0.25s;
+    }
+
+    .hero-headline .accent {
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: clamp(16px, 2vw, 18px);
+      line-height: 1.7;
+      color: var(--gray);
+      max-width: 520px;
+      margin: 0 auto 44px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards;
+      animation-delay: 0.45s;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background-color: var(--accent);
+      color: var(--white);
+      font-family: 'Instrument Sans', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 16px 32px;
+      border-radius: 100px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      letter-spacing: 0.01em;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards;
+      animation-delay: 0.6s;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 32px rgba(37, 99, 235, 0.35);
+    }
+
+    /* ─── Keyframes ──────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ─── Section Shared ─────────────────────────────────────── */
+    section {
+      padding: 80px 24px;
+    }
+
+    .section-label {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    /* ─── Problem Section ────────────────────────────────────── */
+    #problem {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      text-align: left;
+    }
+
+    .problem-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .problem-number {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+    }
+
+    .problem-text {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--navy);
+    }
+
+    /* ─── What We're Building ────────────────────────────────── */
+    #what {
+      text-align: center;
+      background-color: var(--bg);
+    }
+
+    .what-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .what-headline {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--navy);
+      margin-bottom: 24px;
+    }
+
+    .what-body {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--gray);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ─── Survey CTA ─────────────────────────────────────────── */
+    #survey {
+      background-color: var(--navy);
+      color: var(--white);
+      text-align: center;
+      padding: 100px 24px;
+    }
+
+    .survey-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .survey-headline {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .survey-body {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 40px;
+    }
+
+    .survey-embed {
+      margin: 48px 0 32px;
+      width: 100%;
+    }
+
+    .survey-meta {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+
+    /* ─── Survey Form Card ───────────────────────────────────── */
+    .survey-form-card {
+      background-color: var(--bg);
+      border-radius: 16px;
+      padding: 52px 48px;
+      text-align: left;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .form-section {
+      margin-bottom: 0;
+    }
+
+    .form-section+.form-section {
+      margin-top: 48px;
+      padding-top: 48px;
+      border-top: 1px solid var(--light-gray);
+    }
+
+    .form-section-label {
+      display: block;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 32px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: block;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .form-textarea,
+    .form-input,
+    .form-select {
+      width: 100%;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 15px;
+      color: var(--navy);
+      background-color: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: 8px;
+      padding: 12px 14px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-textarea:focus,
+    .form-input:focus,
+    .form-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    /* ─── Other-reveal inputs ────────────────────────────────── */
+    .other-input-group {
+      margin-top: 10px;
+    }
+
+    /* ─── Checkboxes & Radio ─────────────────────────────────── */
+    .check-group,
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .check-item,
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .check-item input[type="checkbox"],
+    .radio-item input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .check-item span,
+    .radio-item span {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 15px;
+      color: var(--navy);
+      cursor: pointer;
+      line-height: 1.4;
+    }
+
+    /* ─── Q6 Tool Follow-up ──────────────────────────────────── */
+    #q6-followups {
+      margin-top: 4px;
+    }
+
+    .tool-followup {
+      margin-top: 16px;
+      padding: 20px 20px 4px;
+      background-color: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: 10px;
+    }
+
+    .tool-followup-title {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .tool-followup .form-group {
+      margin-bottom: 16px;
+    }
+
+    .tool-followup .form-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray);
+    }
+
+    /* ─── Q9 Max Message ─────────────────────────────────────── */
+    .max-select-msg {
+      display: none;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 10px;
+    }
+
+    /* ─── Q12 Spacious ───────────────────────────────────────── */
+    .form-group--spacious .form-textarea {
+      min-height: 140px;
+    }
+
+    /* ─── Testing description ────────────────────────────────── */
+    .testing-description {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 13px;
+      color: var(--gray);
+      margin-top: 14px;
+      line-height: 1.65;
+    }
+
+    /* ─── Submit ─────────────────────────────────────────────── */
+    .btn-submit {
+      display: block;
+      width: 100%;
+      background-color: var(--accent);
+      color: var(--white);
+      font-family: 'Instrument Sans', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 18px 32px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      margin-top: 48px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      transform: scale(1.02);
+      box-shadow: 0 8px 32px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .form-error {
+      display: none;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 14px;
+      color: #DC2626;
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    /* ─── Thank You ──────────────────────────────────────────── */
+    .survey-thank-you {
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .survey-thank-you p {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 18px;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* ─── Footer ─────────────────────────────────────────────── */
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 48px;
+      border-top: 1px solid var(--light-gray);
+      background-color: var(--bg);
+    }
+
+    .footer-wordmark {
+      height: 24px;
+      width: auto;
+      display: block;
+    }
+
+    .footer-credit {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    /* ─── Dividers ───────────────────────────────────────────── */
+    .section-divider {
+      width: 60px;
+      height: 1px;
+      background-color: var(--accent);
+      margin: 0 auto 48px;
+      opacity: 0.5;
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav {
+        padding: 10px 24px;
+      }
+
+      .nav-wordmark img {
+        height: 32px;
+      }
+
+      #hero {
+        padding: 100px 24px 60px;
+      }
+
+      .problem-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+        padding: 24px;
+      }
+
+      section {
+        padding: 60px 24px;
+      }
+
+      #survey {
+        padding: 72px 24px;
+      }
+
+      .survey-form-card {
+        padding: 32px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ─── Nav ──────────────────────────────────────────────── -->
+  <nav id="main-nav">
+    <a href="#" class="nav-wordmark"><img src="logo.png" alt="Deckside" /></a>
+    <a href="#survey" class="nav-cta">Take the Survey</a>
+  </nav>
+
+  <!-- ─── Hero ─────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-rule"></div>
+    <h1 class="hero-headline">
+      Swim team software, built from the <span class="accent">water</span> up.
+    </h1>
+    <p class="hero-sub">
+      I'm Andrew Colgan, a swimmer at Colorado College building Deckside: a platform designed to give coaches better
+      tools and give swimmers real visibility into their own development. For the first time, swimmers will be able to
+      see their practice data, track their progress, and journal their experience in the water. Before I build the next
+      feature, I want to hear from the people who matter most: coaches.
+    </p>
+    <a href="#survey" class="btn-primary">Take the Survey — 10 Minutes</a>
+  </section>
+
+  <!-- ─── Problem ───────────────────────────────────────────── -->
+  <section>
+    <div id="problem">
+      <p class="section-label">The Problem</p>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <span class="problem-number">01</span>
+          <p class="problem-text">Coaching tools are built for coaches. Swimmers have almost no visibility into their
+            own data, workload, or development.</p>
+        </div>
+        <div class="problem-card">
+          <span class="problem-number">02</span>
+          <p class="problem-text">What happens on the deck stays on the deck. Practice data lives in spreadsheets
+            coaches rarely revisit, and the insights that could shape future training never get captured.</p>
+        </div>
+        <div class="problem-card">
+          <span class="problem-number">03</span>
+          <p class="problem-text">The most important conversations in swimming happen in 30-second windows on the pool
+            deck. Without a way to spark or continue those conversations, breakthroughs get lost in the noise.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── What We're Building ───────────────────────────────── -->
+  <section id="what">
+    <div class="what-inner">
+      <p class="section-label">What I'm Building</p>
+      <h2 class="what-headline">The all-in-one platform for coaches and swimmers.</h2>
+      <p class="what-body">Deckside connects practice planning, attendance, yardage tracking, and athlete communication
+        into one place, so coaches spend less time managing tools and more time coaching. And for the first time,
+        swimmers get visibility into their own data.</p>
+    </div>
+  </section>
+
+  <!-- ─── Survey CTA + Form ─────────────────────────────────── -->
+  <section id="survey">
+    <div class="survey-inner">
+      <h2 class="survey-headline">Help build it right.</h2>
+      <p class="survey-body">I'm talking to coaches before building the next feature. Ten minutes of your time shapes
+        what gets built. No sales pitch, just a few questions.</p>
+
+      <div class="survey-embed" id="survey-form">
+
+        <div class="survey-form-card">
+          <form id="deckside-survey" novalidate>
+
+            <!-- ── Section 1: Your Coaching Day ─────────────── -->
+            <div class="form-section">
+              <span class="form-section-label">Section 1 — Your Coaching Day</span>
+
+              <div class="form-group">
+                <label class="form-label" for="q1">How do you typically build and organize your practice plans?</label>
+                <textarea class="form-textarea" id="q1" name="q1"
+                  placeholder="Walk us through your process..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="q2">Walk us through your workflow on a typical practice day — from the
+                  night before to after practice ends.</label>
+                <textarea class="form-textarea" id="q2" name="q2"
+                  placeholder="Night before, morning, during, after..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="q3">Which part of that workflow takes the most time?</label>
+                <select class="form-select" id="q3" name="q3">
+                  <option value="" disabled selected>Select one</option>
+                  <option>Writing and organizing practices</option>
+                  <option>Managing athlete information</option>
+                  <option>Communicating with swimmers</option>
+                  <option>Communicating with assistant coaches</option>
+                  <option>Meet planning and lineups</option>
+                  <option>Administrative or reporting tasks</option>
+                  <option>Other</option>
+                </select>
+                <div class="other-input-group" id="q3-other-group" style="display:none">
+                  <input class="form-input" type="text" id="q3_other" name="q3_other"
+                    placeholder="Please describe..." />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="q4">Which part causes you the most stress?</label>
+                <select class="form-select" id="q4" name="q4">
+                  <option value="" disabled selected>Select one</option>
+                  <option>Writing and organizing practices</option>
+                  <option>Managing athlete information</option>
+                  <option>Communicating with swimmers</option>
+                  <option>Communicating with assistant coaches</option>
+                  <option>Meet planning and lineups</option>
+                  <option>Administrative or reporting tasks</option>
+                  <option>Other</option>
+                </select>
+                <div class="other-input-group" id="q4-other-group" style="display:none">
+                  <input class="form-input" type="text" id="q4_other" name="q4_other"
+                    placeholder="Please describe..." />
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Section 2: Your Current Tools ────────────── -->
+            <div class="form-section">
+              <span class="form-section-label">Section 2 — Your Current Tools</span>
+
+              <div class="form-group">
+                <label class="form-label">What software or tools do you currently use for coaching?</label>
+                <div class="check-group" id="q5-group">
+                  <label class="check-item">
+                    <input type="checkbox" name="q5" value="TeamUnify" />
+                    <span>TeamUnify</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q5" value="Commit Swimming" />
+                    <span>Commit Swimming</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q5" value="Excel or Google Sheets" />
+                    <span>Excel or Google Sheets</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q5" value="Google Docs" />
+                    <span>Google Docs</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q5" value="GroupMe or iMessage" />
+                    <span>GroupMe or iMessage</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q5" value="Nothing formal" />
+                    <span>Nothing formal</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q5" value="Other" />
+                    <span>Other</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Q6: Per-tool follow-ups, revealed by Q5 -->
+              <div id="q6-followups">
+
+                <div class="tool-followup" id="followup-TeamUnify" style="display:none">
+                  <div class="tool-followup-title">TeamUnify</div>
+                  <div class="form-group">
+                    <label class="form-label">What do you like about it?</label>
+                    <input class="form-input" type="text" name="q6_TeamUnify_usedFor" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">What do you wish it did better?</label>
+                    <input class="form-input" type="text" name="q6_TeamUnify_limitation" />
+                  </div>
+                </div>
+
+                <div class="tool-followup" id="followup-Commit Swimming" style="display:none">
+                  <div class="tool-followup-title">Commit Swimming</div>
+                  <div class="form-group">
+                    <label class="form-label">What do you like about it?</label>
+                    <input class="form-input" type="text" name="q6_CommitSwimming_usedFor" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">What do you wish it did better?</label>
+                    <input class="form-input" type="text" name="q6_CommitSwimming_limitation" />
+                  </div>
+                </div>
+
+                <div class="tool-followup" id="followup-Excel or Google Sheets" style="display:none">
+                  <div class="tool-followup-title">Excel or Google Sheets</div>
+                  <div class="form-group">
+                    <label class="form-label">What do you like about it?</label>
+                    <input class="form-input" type="text" name="q6_Sheets_usedFor" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">What do you wish it did better?</label>
+                    <input class="form-input" type="text" name="q6_Sheets_limitation" />
+                  </div>
+                </div>
+
+                <div class="tool-followup" id="followup-Google Docs" style="display:none">
+                  <div class="tool-followup-title">Google Docs</div>
+                  <div class="form-group">
+                    <label class="form-label">What do you like about it?</label>
+                    <input class="form-input" type="text" name="q6_GoogleDocs_usedFor" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">What do you wish it did better?</label>
+                    <input class="form-input" type="text" name="q6_GoogleDocs_limitation" />
+                  </div>
+                </div>
+
+                <div class="tool-followup" id="followup-GroupMe or iMessage" style="display:none">
+                  <div class="tool-followup-title">GroupMe or iMessage</div>
+                  <div class="form-group">
+                    <label class="form-label">What do you like about it?</label>
+                    <input class="form-input" type="text" name="q6_GroupMe_usedFor" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">What do you wish it did better?</label>
+                    <input class="form-input" type="text" name="q6_GroupMe_limitation" />
+                  </div>
+                </div>
+
+                <div class="tool-followup" id="followup-Nothing formal" style="display:none">
+                  <div class="tool-followup-title">Nothing formal</div>
+                  <div class="form-group">
+                    <label class="form-label">What do you like about it?</label>
+                    <input class="form-input" type="text" name="q6_NothingFormal_usedFor" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">What do you wish it did better?</label>
+                    <input class="form-input" type="text" name="q6_NothingFormal_limitation" />
+                  </div>
+                </div>
+
+                <div class="tool-followup" id="followup-Other" style="display:none">
+                  <div class="tool-followup-title">Other</div>
+                  <div class="form-group">
+                    <label class="form-label">What do you like about it?</label>
+                    <input class="form-input" type="text" name="q6_Other_usedFor" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">What do you wish it did better?</label>
+                    <input class="form-input" type="text" name="q6_Other_limitation" />
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="form-group" style="margin-top:32px">
+                <label class="form-label" for="q7">Is there one tool you genuinely couldn't coach without right now?
+                  Which one and why?</label>
+                <textarea class="form-textarea" id="q7" name="q7"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="q8">If you could replace all your current tools with one platform that
+                  did everything well, what would be the three things it absolutely had to nail?</label>
+                <textarea class="form-textarea" id="q8" name="q8"></textarea>
+              </div>
+            </div>
+
+            <!-- ── Section 3: The Friction Inventory ─────────── -->
+            <div class="form-section">
+              <span class="form-section-label">Section 3 — The Friction Inventory</span>
+
+              <div class="form-group">
+                <label class="form-label">Where do you feel the most friction in your day-to-day coaching? Select your
+                  top 3.</label>
+                <div class="check-group" id="q9-group">
+                  <label class="check-item">
+                    <input type="checkbox" name="q9" value="Writing and organizing practice plans" />
+                    <span>Writing and organizing practice plans</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q9" value="Tracking swimmer performance and yardage over time" />
+                    <span>Tracking swimmer performance and yardage over time</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q9" value="Managing attendance" />
+                    <span>Managing attendance</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q9" value="Communicating with swimmers" />
+                    <span>Communicating with swimmers</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q9" value="Communicating with assistant coaches" />
+                    <span>Communicating with assistant coaches</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q9" value="Meet planning and lineup decisions" />
+                    <span>Meet planning and lineup decisions</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q9" value="Giving individual feedback to athletes" />
+                    <span>Giving individual feedback to athletes</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q9" value="Recruiting and roster management" />
+                    <span>Recruiting and roster management</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q9" value="Reporting to administration" />
+                    <span>Reporting to administration</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q9" value="Other" id="q9-other-cb" />
+                    <span>Other</span>
+                  </label>
+                </div>
+                <p class="max-select-msg" id="q9-max-msg">Max 3 selected</p>
+                <div class="other-input-group" id="q9-other-group" style="display:none">
+                  <input class="form-input" type="text" id="q9_other" name="q9_other"
+                    placeholder="Please describe..." />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Has a swimmer ever surprised you mid-practice with fatigue, injury, or an
+                  issue that could have been flagged earlier?</label>
+                <div class="radio-group">
+                  <label class="radio-item">
+                    <input type="radio" name="q10" value="Yes" />
+                    <span>Yes</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q10" value="No" />
+                    <span>No</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q10" value="Sometimes" />
+                    <span>Sometimes</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="q11">How much of your practice plan do you typically share with swimmers
+                  in advance?</label>
+                <select class="form-select" id="q11" name="q11">
+                  <option value="" disabled selected>Select one</option>
+                  <option>Nothing — they find out on the deck</option>
+                  <option>General focus or theme only</option>
+                  <option>Rough yardage and structure</option>
+                  <option>Full practice details</option>
+                  <option>It varies</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- ── Section 4: Unmet Needs ─────────────────────── -->
+            <div class="form-section">
+              <span class="form-section-label">Section 4 — Unmet Needs</span>
+
+              <div class="form-group form-group--spacious">
+                <label class="form-label" for="q12">If you could fix one thing about how you currently coach —
+                  operationally — what would it be?</label>
+                <textarea class="form-textarea" id="q12" name="q12"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="q13">Is there a tool or feature you've always wished existed?</label>
+                <textarea class="form-textarea" id="q13" name="q13"></textarea>
+              </div>
+            </div>
+
+            <!-- ── Section 5: About You ───────────────────────── -->
+            <div class="form-section">
+              <span class="form-section-label">Section 5 — About You</span>
+
+              <div class="form-group">
+                <label class="form-label">What level do you coach?</label>
+                <div class="check-group">
+                  <label class="check-item">
+                    <input type="checkbox" name="q14" value="Club" />
+                    <span>Club</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q14" value="High School" />
+                    <span>High School</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q14" value="Collegiate D1" />
+                    <span>Collegiate D1</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q14" value="Collegiate D2" />
+                    <span>Collegiate D2</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q14" value="Collegiate D3" />
+                    <span>Collegiate D3</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q14" value="Masters" />
+                    <span>Masters</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="q14" value="Multiple" />
+                    <span>Multiple</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="q15">How large is your roster?</label>
+                <select class="form-select" id="q15" name="q15">
+                  <option value="" disabled selected>Select one</option>
+                  <option>Under 20</option>
+                  <option>20–40</option>
+                  <option>40–60</option>
+                  <option>60+</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="q16">How many years have you been coaching?</label>
+                <select class="form-select" id="q16" name="q16">
+                  <option value="" disabled selected>Select one</option>
+                  <option>0–2</option>
+                  <option>3–7</option>
+                  <option>8–15</option>
+                  <option>15+</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- ── Section 6: Stay Involved ──────────────────── -->
+            <div class="form-section">
+              <span class="form-section-label">Section 6 — Stay Involved</span>
+
+              <div class="form-group">
+                <label class="form-label">Would you use a platform like Deckside?</label>
+                <div class="radio-group" id="q17-group">
+                  <label class="radio-item">
+                    <input type="radio" name="q17" value="Yes" />
+                    <span>Yes</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q17" value="Maybe" />
+                    <span>Maybe</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q17" value="No" />
+                    <span>No</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Would you be interested in being part of the early testing process?</label>
+                <div class="radio-group" id="q18-group">
+                  <label class="radio-item">
+                    <input type="radio" name="q18" value="Yes" />
+                    <span>Yes</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q18" value="Maybe" />
+                    <span>Maybe</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q18" value="Not at this time" />
+                    <span>Not at this time</span>
+                  </label>
+                </div>
+                <p class="testing-description">Early testers get access to features as they're built and occasional
+                  check-ins to share feedback. No commitment required.</p>
+              </div>
+
+              <div class="form-group" id="q19-group" style="display:none">
+                <label class="form-label" for="q19">If yes, drop your email below and we'll be in touch.</label>
+                <input class="form-input" type="email" id="q19" name="q19" placeholder="you@example.com" />
+              </div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submit-btn">Submit — Help Shape What Gets Built</button>
+            <p class="form-error" id="form-error">Something went wrong. Please try again.</p>
+
+          </form>
+        </div>
+
+      </div>
+
+      <p class="survey-meta">Takes ~10 minutes · Completely anonymous</p>
+    </div>
+  </section>
+
+  <!-- ─── Footer ────────────────────────────────────────────── -->
+  <footer>
+    <img src="logo.png" alt="Deckside" class="footer-wordmark" />
+    <span class="footer-credit">Built by Andrew Colgan · Colorado College · 2026</span>
+  </footer>
+
+  <!-- ─── JS ───────────────────────────────────────────────── -->
+  <script>
+    // Nav scroll state
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Q5 → Q6 dynamic follow-up rows
+    document.querySelectorAll('input[name="q5"]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const el = document.getElementById('followup-' + cb.value);
+        if (el) el.style.display = cb.checked ? 'block' : 'none';
+      });
+    });
+
+    // Q3 → reveal "Other" text input
+    document.getElementById('q3').addEventListener('change', function () {
+      document.getElementById('q3-other-group').style.display = this.value === 'Other' ? 'block' : 'none';
+    });
+
+    // Q4 → reveal "Other" text input
+    document.getElementById('q4').addEventListener('change', function () {
+      document.getElementById('q4-other-group').style.display = this.value === 'Other' ? 'block' : 'none';
+    });
+
+    // Q9 max 3 selections + "Other" text reveal
+    const q9boxes = document.querySelectorAll('input[name="q9"]');
+    const q9msg = document.getElementById('q9-max-msg');
+
+    q9boxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        const checked = Array.from(q9boxes).filter(c => c.checked).length;
+        q9msg.style.display = checked >= 3 ? 'block' : 'none';
+        q9boxes.forEach(c => {
+          if (!c.checked) c.disabled = checked >= 3;
+        });
+        if (cb.value === 'Other') {
+          document.getElementById('q9-other-group').style.display = cb.checked ? 'block' : 'none';
+        }
+      });
+    });
+
+    // Q18 → reveal Q19 email field
+    document.querySelectorAll('input[name="q18"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const show = radio.value === 'Yes' || radio.value === 'Maybe';
+        document.getElementById('q19-group').style.display = show ? 'block' : 'none';
+      });
+    });
+  </script>
+
+  <!-- ─── Firebase ─────────────────────────────────────────── -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyATmi3ZAelybllb5BzSWtOTtrqEiYx1KmU",
+      authDomain: "elite-swim-c46dd.firebaseapp.com",
+      projectId: "elite-swim-c46dd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('deckside-survey');
+    const submitBtn = document.getElementById('submit-btn');
+    const formError = document.getElementById('form-error');
+    const embedWrap = document.getElementById('survey-form');
+
+    const getVal = id => (document.getElementById(id)?.value ?? '').trim();
+    const getSelect = id => document.getElementById(id)?.value ?? '';
+    const getRadio = name => document.querySelector(`input[name="${name}"]:checked`)?.value ?? '';
+    const getChecked = name => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+
+    function getQ6Tools() {
+      const tools = {};
+      document.querySelectorAll('.tool-followup').forEach(el => {
+        if (el.style.display === 'none') return;
+        const title = el.querySelector('.tool-followup-title').textContent;
+        const likedEl = el.querySelector('[name$="_usedFor"]');
+        const wishEl = el.querySelector('[name$="_limitation"]');
+        tools[title] = {
+          liked: (likedEl?.value ?? '').trim(),
+          wishBetter: (wishEl?.value ?? '').trim(),
+        };
+      });
+      return tools;
+    }
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
+      formError.style.display = 'none';
+
+      const q3val = getSelect('q3');
+      const q4val = getSelect('q4');
+      const q3other = getVal('q3_other');
+      const q4other = getVal('q4_other');
+      const q9other = getVal('q9_other');
+      const q18val = getRadio('q18');
+
+      try {
+        await addDoc(collection(db, 'surveyResponses'), {
+          timestamp: serverTimestamp(),
+          q1: getVal('q1'),
+          q2: getVal('q2'),
+          q3: q3val,
+          ...(q3val === 'Other' && q3other && { q3_other: q3other }),
+          q4: q4val,
+          ...(q4val === 'Other' && q4other && { q4_other: q4other }),
+          q5: getChecked('q5'),
+          q6_tools: getQ6Tools(),
+          q7: getVal('q7'),
+          q8: getVal('q8'),
+          q9_friction: getChecked('q9'),
+          ...(q9other && { q9_other: q9other }),
+          q10: getRadio('q10'),
+          q11: getSelect('q11'),
+          q12: getVal('q12'),
+          q13: getVal('q13'),
+          q14: getChecked('q14'),
+          q15: getSelect('q15'),
+          q16: getSelect('q16'),
+          q17: getRadio('q17'),
+          q18: q18val,
+          ...((q18val === 'Yes' || q18val === 'Maybe') && { q19: getVal('q19') }),
+        });
+
+        embedWrap.innerHTML = `
+          <div class="survey-thank-you">
+            <p>Thank you — your input genuinely shapes what gets built. We'll be in touch if you opted in.</p>
+          </div>
+        `;
+      } catch (err) {
+        console.error('Firestore write failed:', err);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit — Help Shape What Gets Built';
+        formError.style.display = 'block';
+      }
+    });
+  </script>
+
+</body>
+
+</html>
