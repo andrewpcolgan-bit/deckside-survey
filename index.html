@@ -1053,7 +1053,7 @@
               <span class="form-section-label">Section 6 — Stay Involved</span>
 
               <div class="form-group">
-                <label class="form-label">Would you use a platform like Deckside?</label>
+                <label class="form-label">Is this something you'd be interested in using for your program?</label>
                 <div class="radio-group" id="q17-group">
                   <label class="radio-item">
                     <input type="radio" name="q17" value="Yes" />
@@ -1071,26 +1071,22 @@
               </div>
 
               <div class="form-group">
-                <label class="form-label">Would you be interested in being part of the early testing process?</label>
+                <label class="form-label">Would you be open to being contacted when Deckside launches?</label>
                 <div class="radio-group" id="q18-group">
                   <label class="radio-item">
                     <input type="radio" name="q18" value="Yes" />
                     <span>Yes</span>
                   </label>
                   <label class="radio-item">
-                    <input type="radio" name="q18" value="Maybe" />
-                    <span>Maybe</span>
-                  </label>
-                  <label class="radio-item">
-                    <input type="radio" name="q18" value="Not at this time" />
-                    <span>Not at this time</span>
+                    <input type="radio" name="q18" value="No" />
+                    <span>No</span>
                   </label>
                 </div>
               </div>
 
               <div class="form-group" id="q19-group" style="display:none">
-                <label class="form-label" for="q19">If yes, drop your email below and we'll be in touch.</label>
-                <input class="form-input" type="email" id="q19" name="q19" placeholder="you@example.com" />
+                <label class="form-label" for="q19">Your email address</label>
+                <input class="form-input" type="email" id="q19" name="q19" placeholder="Your email address" />
               </div>
             </div>
 
@@ -1158,8 +1154,7 @@
     // Q18 → reveal Q19 email field
     document.querySelectorAll('input[name="q18"]').forEach(radio => {
       radio.addEventListener('change', () => {
-        const show = radio.value === 'Yes' || radio.value === 'Maybe';
-        document.getElementById('q19-group').style.display = show ? 'block' : 'none';
+        document.getElementById('q19-group').style.display = radio.value === 'Yes' ? 'block' : 'none';
       });
     });
   </script>
@@ -1240,7 +1235,7 @@
           q16: getSelect('q16'),
           q17: getRadio('q17'),
           q18: q18val,
-          ...((q18val === 'Yes' || q18val === 'Maybe') && { q19: getVal('q19') }),
+          ...(q18val === 'Yes' && { q19: getVal('q19') }),
         });
 
         embedWrap.innerHTML = `
