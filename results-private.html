@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deckside — Survey Results</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Base ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #F7F5F2;
+      --navy:       #1A1F2E;
+      --accent:     #2563EB;
+      --accent-lt:  #DBEAFE;
+      --gray:       #6B7280;
+      --light-gray: #E5E7EB;
+      --white:      #FFFFFF;
+      --green:      #10B981;
+      --amber:      #F59E0B;
+      --red-muted:  #9CA3AF;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--navy);
+      font-family: 'Instrument Sans', sans-serif;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ─── Loading ────────────────────────────────────────────── */
+    #loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      gap: 16px;
+      color: var(--gray);
+      font-size: 15px;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--light-gray);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #error-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      gap: 12px;
+      color: var(--gray);
+      font-size: 15px;
+      text-align: center;
+      padding: 24px;
+    }
+
+    #error-state strong { color: var(--navy); font-size: 18px; }
+
+    /* ─── Page Header ────────────────────────────────────────── */
+    .page-header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 28px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .header-left h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .header-meta {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .btn-refresh {
+      background: rgba(255,255,255,0.1);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-refresh:hover { background: rgba(255,255,255,0.18); }
+    .btn-refresh:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ─── Main Content ───────────────────────────────────────── */
+    #dashboard { display: none; }
+
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 48px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* ─── Cards ──────────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 28px;
+      border: 1px solid var(--light-gray);
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 10px;
+    }
+
+    .card-value {
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .card-sub {
+      font-size: 13px;
+      color: var(--gray);
+      margin-top: 6px;
+    }
+
+    /* ─── Overview Grid ──────────────────────────────────────── */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    /* ─── Section ────────────────────────────────────────────── */
+    .section-block {
+      background: var(--white);
+      border-radius: 12px;
+      border: 1px solid var(--light-gray);
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 20px 28px 16px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--gray);
+      margin-top: 2px;
+    }
+
+    .section-body {
+      padding: 24px 28px;
+    }
+
+    /* ─── Two-column layout ──────────────────────────────────── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* ─── Bar Charts ─────────────────────────────────────────── */
+    .bar-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bar-label {
+      width: 220px;
+      flex-shrink: 0;
+      font-size: 13px;
+      color: var(--navy);
+      line-height: 1.3;
+    }
+
+    .bar-label.narrow { width: 160px; }
+
+    .bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--light-gray);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: var(--accent);
+      transition: width 0.4s ease;
+      min-width: 2px;
+    }
+
+    .bar-fill.green  { background: var(--green); }
+    .bar-fill.amber  { background: var(--amber); }
+    .bar-fill.muted  { background: var(--red-muted); }
+
+    .bar-count {
+      width: 36px;
+      flex-shrink: 0;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray);
+      text-align: right;
+    }
+
+    .empty-state {
+      font-size: 14px;
+      color: var(--gray);
+      text-align: center;
+      padding: 24px 0;
+    }
+
+    /* ─── Tabs ───────────────────────────────────────────────── */
+    .tab-nav {
+      display: flex;
+      gap: 2px;
+      padding: 0 28px;
+      border-bottom: 1px solid var(--light-gray);
+      background: var(--white);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 14px 16px;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+      margin-bottom: -1px;
+    }
+
+    .tab-btn:hover { color: var(--navy); }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    .tab-panel { display: none; padding: 24px 28px; }
+    .tab-panel.active { display: block; }
+
+    /* ─── Response Cards ─────────────────────────────────────── */
+    .response-feed { display: flex; flex-direction: column; gap: 12px; }
+
+    .response-card {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 16px 18px;
+      border: 1px solid var(--light-gray);
+    }
+
+    .response-text {
+      font-size: 14px;
+      color: var(--navy);
+      line-height: 1.65;
+      white-space: pre-wrap;
+    }
+
+    .response-ts {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 8px;
+    }
+
+    /* ─── Email Table ────────────────────────────────────────── */
+    .email-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .email-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .email-table td {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--light-gray);
+      color: var(--navy);
+    }
+
+    .email-table td:last-child { color: var(--gray); font-size: 13px; }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .page-header { padding: 20px 24px; }
+      .main { padding: 24px 20px 60px; }
+      .overview-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col { grid-template-columns: 1fr; }
+      .bar-label { width: 160px; }
+    }
+
+    @media (max-width: 600px) {
+      .overview-grid { grid-template-columns: 1fr 1fr; }
+      .page-header { flex-direction: column; align-items: flex-start; gap: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Loading ───────────────────────────────────────────── -->
+  <div id="loading">
+    <div class="spinner"></div>
+    <span>Loading survey responses…</span>
+  </div>
+
+  <!-- ─── Error ─────────────────────────────────────────────── -->
+  <div id="error-state">
+    <strong>Could not load responses</strong>
+    <span id="error-msg">Check your Firebase config and Firestore rules.</span>
+  </div>
+
+  <!-- ─── Dashboard ─────────────────────────────────────────── -->
+  <div id="dashboard">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div class="header-left">
+        <h1>Deckside — Survey Results</h1>
+        <div class="header-meta" id="header-meta">Loading…</div>
+      </div>
+      <button class="btn-refresh" id="refresh-btn">↻ Refresh Results</button>
+    </div>
+
+    <div class="main">
+
+      <!-- Overview Cards -->
+      <div class="overview-grid" id="overview-grid"></div>
+
+      <!-- Q3 + Q4 — Pain Points -->
+      <div class="two-col">
+        <div class="section-block">
+          <div class="section-header">
+            <div class="section-title">Most Time-Consuming</div>
+            <div class="section-subtitle">Q3 — Which part of your workflow takes the most time?</div>
+          </div>
+          <div class="section-body">
+            <div class="bar-list" id="chart-q3"></div>
+          </div>
+        </div>
+        <div class="section-block">
+          <div class="section-header">
+            <div class="section-title">Most Stressful</div>
+            <div class="section-subtitle">Q4 — Which part causes you the most stress?</div>
+          </div>
+          <div class="section-body">
+            <div class="bar-list" id="chart-q4"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q5 — Current Tools -->
+      <div class="section-block">
+        <div class="section-header">
+          <div class="section-title">Current Tools</div>
+          <div class="section-subtitle">Q5 — What software or tools do you currently use for coaching?</div>
+        </div>
+        <div class="section-body">
+          <div class="bar-list" id="chart-q5"></div>
+        </div>
+      </div>
+
+      <!-- Q9 — Friction Inventory -->
+      <div class="section-block">
+        <div class="section-header">
+          <div class="section-title">Friction Inventory</div>
+          <div class="section-subtitle">Q9 — Where do you feel the most friction? (top 3 per coach)</div>
+        </div>
+        <div class="section-body">
+          <div class="bar-list" id="chart-q9"></div>
+        </div>
+      </div>
+
+      <!-- Q17 + Q18 — Purchase Intent -->
+      <div class="two-col">
+        <div class="section-block">
+          <div class="section-header">
+            <div class="section-title">Would Use Deckside</div>
+            <div class="section-subtitle">Q17 — Interested in using it for their program?</div>
+          </div>
+          <div class="section-body">
+            <div class="bar-list" id="chart-q17"></div>
+          </div>
+        </div>
+        <div class="section-block">
+          <div class="section-header">
+            <div class="section-title">Open to Contact at Launch</div>
+            <div class="section-subtitle">Q18 — Open to being contacted when Deckside launches?</div>
+          </div>
+          <div class="section-body">
+            <div class="bar-list" id="chart-q18"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Open-Ended Tabs -->
+      <div class="section-block">
+        <div class="section-header">
+          <div class="section-title">Open-Ended Responses</div>
+        </div>
+        <div class="tab-nav" id="tab-nav"></div>
+        <div id="tab-panels"></div>
+      </div>
+
+      <!-- Email List -->
+      <div class="section-block" id="email-section" style="display:none">
+        <div class="section-header">
+          <div class="section-title">Emails Collected</div>
+          <div class="section-subtitle">Q19 — Coaches who want to be contacted at launch</div>
+        </div>
+        <div class="section-body">
+          <table class="email-table" id="email-table">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody id="email-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /.main -->
+  </div><!-- /#dashboard -->
+
+  <!-- ─── Firebase + Logic ───────────────────────────────────── -->
+  <script type="module">
+    import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs }
+      from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    /* ── Firebase init ──────────────────────────────────────── */
+    const firebaseConfig = {
+      apiKey:    "AIzaSyATmi3ZAelybllb5BzSWtOTtrqEiYx1KmU",
+      authDomain:"elite-swim-c46dd.firebaseapp.com",
+      projectId: "elite-swim-c46dd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    /* ── Helpers ────────────────────────────────────────────── */
+    const $ = id => document.getElementById(id);
+
+    function fmt(ts) {
+      if (!ts) return '—';
+      const d = ts.toDate ? ts.toDate() : new Date(ts);
+      return d.toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric',
+        hour: 'numeric', minute: '2-digit'
+      });
+    }
+
+    function fmtShort(ts) {
+      if (!ts) return '—';
+      const d = ts.toDate ? ts.toDate() : new Date(ts);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function pct(n, total) {
+      if (!total) return '0%';
+      return Math.round((n / total) * 100) + '%';
+    }
+
+    function countField(docs, field) {
+      const counts = {};
+      docs.forEach(d => {
+        const v = d[field];
+        if (v && typeof v === 'string') counts[v] = (counts[v] || 0) + 1;
+      });
+      return counts;
+    }
+
+    function countArrayField(docs, field) {
+      const counts = {};
+      docs.forEach(d => {
+        const arr = d[field];
+        if (Array.isArray(arr)) arr.forEach(v => { counts[v] = (counts[v] || 0) + 1; });
+      });
+      return counts;
+    }
+
+    function sorted(counts) {
+      return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    }
+
+    /* ── Bar chart renderer ─────────────────────────────────── */
+    function renderBars(counts, colorClass = '') {
+      const entries = sorted(counts);
+      if (!entries.length) return '<p class="empty-state">No responses yet.</p>';
+      const max = entries[0][1];
+      return entries.map(([label, count]) => {
+        const w = max > 0 ? (count / max) * 100 : 0;
+        return `
+          <div class="bar-row">
+            <div class="bar-label">${label}</div>
+            <div class="bar-track">
+              <div class="bar-fill ${colorClass}" style="width:${w}%"></div>
+            </div>
+            <div class="bar-count">${count}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderBarsQ17(counts, total) {
+      const order  = ['Yes', 'Maybe', 'No'];
+      const colors = { Yes: 'green', Maybe: 'amber', No: 'muted' };
+      const entries = order.filter(k => counts[k] !== undefined)
+        .concat(Object.keys(counts).filter(k => !order.includes(k)))
+        .map(k => [k, counts[k] || 0]);
+      if (!entries.length) return '<p class="empty-state">No responses yet.</p>';
+      const max = Math.max(...entries.map(e => e[1]));
+      return entries.map(([label, count]) => {
+        const w = max > 0 ? (count / max) * 100 : 0;
+        return `
+          <div class="bar-row">
+            <div class="bar-label narrow">${label} <span style="color:var(--gray);font-weight:400">${pct(count, total)}</span></div>
+            <div class="bar-track">
+              <div class="bar-fill ${colors[label] || ''}" style="width:${w}%"></div>
+            </div>
+            <div class="bar-count">${count}</div>
+          </div>`;
+      }).join('');
+    }
+
+    /* ── Open-ended tab config ──────────────────────────────── */
+    const TABS = [
+      { id: 'q1',  label: 'Q1',  title: 'Practice Planning' },
+      { id: 'q2',  label: 'Q2',  title: 'Day Workflow'      },
+      { id: 'q7',  label: 'Q7',  title: 'Essential Tool'    },
+      { id: 'q8',  label: 'Q8',  title: 'Platform Needs'    },
+      { id: 'q11', label: 'Q11', title: 'Practice Sharing'  },
+      { id: 'q12', label: 'Q12', title: 'Fix One Thing'     },
+      { id: 'q13', label: 'Q13', title: 'Wish List'         },
+    ];
+
+    /* ── Render entire dashboard ────────────────────────────── */
+    function render(docs) {
+      const total = docs.length;
+      const latest = docs[0]?.timestamp;
+
+      /* Header meta */
+      $('header-meta').textContent = total === 0
+        ? 'No responses yet'
+        : `${total} response${total !== 1 ? 's' : ''} · Last: ${fmt(latest)}`;
+
+      /* ── Overview cards ─────────────────────────────────── */
+      const wantToUse  = docs.filter(d => d.q17 === 'Yes' || d.q17 === 'Maybe').length;
+      const openContact = docs.filter(d => d.q18 === 'Yes').length;
+      const emails     = docs.filter(d => d.q19 && d.q19.trim()).length;
+
+      $('overview-grid').innerHTML = [
+        { label: 'Total Responses',   value: total,       sub: '&nbsp;' },
+        { label: 'Want to Use',       value: wantToUse,   sub: total ? `${pct(wantToUse, total)} answered Yes or Maybe` : '—' },
+        { label: 'Open to Contact',   value: openContact, sub: total ? `${pct(openContact, total)} said Yes on Q18`      : '—' },
+        { label: 'Emails Collected',  value: emails,      sub: emails ? 'in the email list below' : 'none yet' },
+      ].map(c => `
+        <div class="card">
+          <div class="card-title">${c.label}</div>
+          <div class="card-value">${c.value}</div>
+          <div class="card-sub">${c.sub}</div>
+        </div>
+      `).join('');
+
+      /* ── Q3 & Q4 charts ─────────────────────────────────── */
+      const q3counts = countField(docs, 'q3');
+      const q4counts = countField(docs, 'q4');
+      $('chart-q3').innerHTML = renderBars(q3counts);
+      $('chart-q4').innerHTML = renderBars(q4counts);
+
+      /* ── Q5 tools ───────────────────────────────────────── */
+      const q5counts = countArrayField(docs, 'q5');
+      $('chart-q5').innerHTML = renderBars(q5counts);
+
+      /* ── Q9 friction ────────────────────────────────────── */
+      const q9counts = countArrayField(docs, 'q9_friction');
+      $('chart-q9').innerHTML = renderBars(q9counts);
+
+      /* ── Q17 & Q18 intent ───────────────────────────────── */
+      const q17counts = countField(docs, 'q17');
+      const q18counts = countField(docs, 'q18');
+      $('chart-q17').innerHTML = renderBarsQ17(q17counts, total);
+      $('chart-q18').innerHTML = renderBarsQ17(q18counts, total);
+
+      /* ── Open-ended tabs ────────────────────────────────── */
+      const tabNav    = $('tab-nav');
+      const tabPanels = $('tab-panels');
+
+      tabNav.innerHTML = TABS.map((t, i) => `
+        <button class="tab-btn ${i === 0 ? 'active' : ''}" data-tab="${t.id}">
+          ${t.label} <span style="font-weight:400;opacity:.6">${t.title}</span>
+        </button>
+      `).join('');
+
+      tabPanels.innerHTML = TABS.map((t, i) => {
+        const responses = docs
+          .filter(d => d[t.id] && d[t.id].toString().trim())
+          .map(d => `
+            <div class="response-card">
+              <div class="response-text">${escHtml(d[t.id].toString().trim())}</div>
+              <div class="response-ts">${fmt(d.timestamp)}</div>
+            </div>
+          `).join('');
+
+        const body = responses
+          ? `<div class="response-feed">${responses}</div>`
+          : '<p class="empty-state">No responses for this question yet.</p>';
+
+        return `<div class="tab-panel ${i === 0 ? 'active' : ''}" id="tab-panel-${t.id}">${body}</div>`;
+      }).join('');
+
+      /* Tab click handlers */
+      tabNav.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabNav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          tabPanels.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          $('tab-panel-' + btn.dataset.tab).classList.add('active');
+        });
+      });
+
+      /* ── Email table ────────────────────────────────────── */
+      const emailDocs = docs.filter(d => d.q19 && d.q19.trim());
+      if (emailDocs.length) {
+        $('email-section').style.display = '';
+        $('email-tbody').innerHTML = emailDocs.map(d => `
+          <tr>
+            <td>${escHtml(d.q19.trim())}</td>
+            <td>${fmtShort(d.timestamp)}</td>
+          </tr>
+        `).join('');
+      } else {
+        $('email-section').style.display = 'none';
+      }
+    }
+
+    /* ── Escape HTML ────────────────────────────────────────── */
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    /* ── Fetch ──────────────────────────────────────────────── */
+    async function fetchAndRender() {
+      $('refresh-btn').disabled = true;
+      $('refresh-btn').textContent = '↻ Refreshing…';
+
+      try {
+        console.log('[Deckside] Fetching surveyResponses…');
+
+        // No orderBy — avoids requiring a Firestore composite index.
+        // Sort client-side instead.
+        const snap = await getDocs(collection(db, 'surveyResponses'));
+        const docs = snap.docs
+          .map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => {
+            const ta = a.timestamp?.toMillis?.() ?? 0;
+            const tb = b.timestamp?.toMillis?.() ?? 0;
+            return tb - ta; // descending
+          });
+
+        console.log(`[Deckside] Fetched ${docs.length} document(s).`, docs);
+
+        $('loading').style.display     = 'none';
+        $('error-state').style.display = 'none';
+        $('dashboard').style.display   = 'block'; // ← was '' which left CSS display:none in effect
+
+        render(docs);
+        console.log('[Deckside] Render complete.');
+      } catch (err) {
+        console.error('[Deckside] Fetch error:', err);
+        $('loading').style.display     = 'none';
+        $('error-state').style.display = 'flex';
+        $('error-msg').textContent     = err.message || 'Unknown error.';
+      } finally {
+        $('refresh-btn').disabled    = false;
+        $('refresh-btn').textContent = '↻ Refresh Results';
+      }
+    }
+
+    /* ── Boot ───────────────────────────────────────────────── */
+    $('refresh-btn').addEventListener('click', fetchAndRender);
+    fetchAndRender();
+  </script>
+
+</body>
+</html>
