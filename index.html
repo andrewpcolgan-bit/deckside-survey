@@ -616,10 +616,120 @@
         padding: 32px 20px;
       }
     }
+    /* ─── Maintenance Overlay ────────────────────────────────── */
+    #maintenance-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background-color: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    #maintenance-overlay img {
+      height: 32px;
+      width: auto;
+      margin-bottom: 8px;
+    }
+
+    #maintenance-overlay .maint-heading {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      max-width: 420px;
+    }
+
+    #maintenance-overlay .maint-msg {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 15px;
+      color: var(--gray);
+      max-width: 360px;
+      line-height: 1.6;
+    }
+
+    #maintenance-overlay .maint-row {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    #maintenance-overlay #maint-pw {
+      flex: 1;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 15px;
+      color: var(--navy);
+      background: #FFFFFF;
+      border: 1px solid var(--light-gray);
+      border-radius: 8px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    #maintenance-overlay #maint-pw:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    #maintenance-overlay #maint-pw.maint-shake {
+      animation: maintShake 0.35s ease;
+      border-color: #EF4444;
+    }
+
+    @keyframes maintShake {
+      0%, 100% { transform: translateX(0); }
+      25%       { transform: translateX(-6px); }
+      75%       { transform: translateX(6px); }
+    }
+
+    #maintenance-overlay #maint-submit {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      background: var(--accent);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 20px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    #maintenance-overlay #maint-submit:hover { opacity: 0.85; }
+
+    #maintenance-overlay #maint-error {
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 13px;
+      color: #EF4444;
+      min-height: 18px;
+    }
   </style>
 </head>
 
 <body>
+
+  <!-- ─── Maintenance Overlay ───────────────────────────────── -->
+  <div id="maintenance-overlay">
+    <img src="logo.png" alt="Deckside" />
+    <p class="maint-heading">We're making some improvements.</p>
+    <p class="maint-msg">Check back soon.</p>
+    <div class="maint-row">
+      <input id="maint-pw" type="password" placeholder="Password" autocomplete="off" />
+      <button id="maint-submit">Unlock</button>
+    </div>
+    <div id="maint-error"></div>
+  </div>
+
 
   <!-- ─── Nav ──────────────────────────────────────────────── -->
   <nav id="main-nav">
@@ -1110,6 +1220,44 @@
 
   <!-- ─── JS ───────────────────────────────────────────────── -->
   <script>
+    // ─── Maintenance gate ──────────────────────────────────────
+    (function () {
+      const overlay = document.getElementById('maintenance-overlay');
+      const pwInput = document.getElementById('maint-pw');
+      const errEl   = document.getElementById('maint-error');
+      const CORRECT = 'Pakoras358';
+      const SK      = 'deckside_auth';
+
+      function unlock() {
+        overlay.style.display = 'none';
+      }
+
+      function attempt() {
+        if (pwInput.value === CORRECT) {
+          sessionStorage.setItem(SK, 'true');
+          unlock();
+        } else {
+          errEl.textContent = 'Incorrect password.';
+          pwInput.value = '';
+          pwInput.classList.remove('maint-shake');
+          void pwInput.offsetWidth; // force reflow so animation re-fires
+          pwInput.classList.add('maint-shake');
+          pwInput.addEventListener('animationend', () => pwInput.classList.remove('maint-shake'), { once: true });
+          pwInput.focus();
+        }
+      }
+
+      if (sessionStorage.getItem(SK) === 'true') {
+        unlock();
+      } else {
+        overlay.style.display = 'flex';
+      }
+
+      document.getElementById('maint-submit').addEventListener('click', attempt);
+      pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') attempt(); });
+    })();
+    // ──────────────────────────────────────────────────────────
+
     // Nav scroll state
     const nav = document.getElementById('main-nav');
     window.addEventListener('scroll', () => {
