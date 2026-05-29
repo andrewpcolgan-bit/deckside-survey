@@ -801,8 +801,30 @@
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="q2">Has an athlete ever surprised you mid-practice or at a meet with fatigue, injury, or a mental block you didn't see coming? What happened?</label>
-                <textarea class="form-textarea" id="q2" name="q2" placeholder="Tell us the story..."></textarea>
+                <label class="form-label">How confident are you that you'd know if an athlete was mentally or physically struggling — before it showed up in their performance?</label>
+                <div class="radio-group">
+                  <label class="radio-item">
+                    <input type="radio" name="q2" value="Very confident — I pick up on it quickly" />
+                    <span>Very confident — I pick up on it quickly</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q2" value="Fairly confident — I catch most of it" />
+                    <span>Fairly confident — I catch most of it</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q2" value="Somewhat — I probably miss things" />
+                    <span>Somewhat — I probably miss things</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q2" value="Honestly, not very — it usually catches me off guard" />
+                    <span>Honestly, not very — it usually catches me off guard</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="q2b">Anything you'd add? (optional)</label>
+                <textarea class="form-textarea" id="q2b" name="q2b" placeholder="Any context or stories welcome..."></textarea>
               </div>
 
               <div class="form-group">
@@ -832,7 +854,7 @@
             <div class="form-section">
               <span class="form-section-label">Section 2 — The Concept</span>
 
-              <p class="testing-description" style="margin-bottom:32px">Deckside gives athletes a place to log how they felt after practice, track their own yardage and progress, and send their coach a quick check-in. Coaches see a real-time dashboard of how their athletes are responding to training — not after a bad meet, but practice by practice.</p>
+              <p class="testing-description" style="margin-bottom:32px">Deckside gives athletes a place to log how they felt after practice, track their own yardage and progress, and send their coach a quick check-in. Coaches get a clearer picture of how their training is landing. Not to replace the conversations that happen on the deck, but to make them better.</p>
 
               <div class="form-group">
                 <label class="form-label">If you had consistent check-ins from your athletes after each practice, would it change how you write the next one?</label>
@@ -1084,7 +1106,8 @@
         await addDoc(collection(db, 'surveyResponses'), {
           timestamp: serverTimestamp(),
           q1: getVal('q1'),
-          q2: getVal('q2'),
+          q2: getRadio('q2'),
+          q2b: getVal('q2b'),
           q3: getRadio('q3'),
           q4: getRadio('q4'),
           q5: getVal('q5'),
@@ -1099,7 +1122,7 @@
 
         embedWrap.innerHTML = `
           <div class="survey-thank-you">
-            <p>Thank you — your input genuinely shapes what gets built. We'll be in touch if you opted in.</p>
+            <p>Thank you. Your input genuinely shapes what gets built. We'll be in touch if you opted in.</p>
           </div>
         `;
       } catch (err) {
