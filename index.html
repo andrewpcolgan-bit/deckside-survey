@@ -744,9 +744,7 @@
       Swim team software, built from the <span class="accent">water</span> up.
     </h1>
     <p class="hero-sub">
-      I'm Andrew Colgan, a swimmer at Colorado College building Deckside: a platform designed to give coaches better
-      tools and give swimmers real visibility into their own development. For the first time, swimmers will be able to
-      see their practice data, track their progress, and journal their experience in the water.
+      I'm Andrew Colgan, a D3 swimmer at Colorado College building Deckside — a platform that closes the feedback loop between coaches and athletes. Practices get planned. Athletes leave the deck. Nobody really knows how the training is landing. I'm building the tool that changes that. Help me build it right.
     </p>
     <a href="#survey" class="btn-primary">Take the Survey — 10 Minutes</a>
   </section>
@@ -780,9 +778,7 @@
     <div class="what-inner">
       <p class="section-label">What I'm Building</p>
       <h2 class="what-headline">The all-in-one platform for coaches and swimmers.</h2>
-      <p class="what-body">Deckside connects practice planning, attendance, yardage tracking, and athlete communication
-        into one place, so coaches spend less time managing tools and more time coaching. And for the first time,
-        swimmers get visibility into their own data.</p>
+      <p class="what-body">Deckside is practice planning software with a feedback loop baked in. Coaches build and log practices natively. Athletes see their own training data, track their progress, and check in on how they're feeling. Coaches get a real-time picture of how their training is landing — not after a bad meet, but practice by practice.</p>
     </div>
   </section>
 
@@ -798,346 +794,145 @@
         <div class="survey-form-card">
           <form id="deckside-survey" novalidate>
 
-            <!-- ── Section 1: Your Coaching Day ─────────────── -->
+            <!-- ── Section 1: The Feedback Loop ───────────────── -->
             <div class="form-section">
-              <span class="form-section-label">Section 1 — Your Coaching Day</span>
+              <span class="form-section-label">Section 1 — The Feedback Loop</span>
 
               <div class="form-group">
-                <label class="form-label" for="q1">How do you typically build and organize your practice plans?</label>
-                <textarea class="form-textarea" id="q1" name="q1"
-                  placeholder="Walk us through your process..."></textarea>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="q2">Walk us through your workflow on a typical practice day — from the
-                  night before to after practice ends.</label>
-                <textarea class="form-textarea" id="q2" name="q2"
-                  placeholder="Night before, morning, during, after..."></textarea>
+                <label class="form-label" for="q1">After a hard practice, how do you typically find out how your athletes are feeling — physically and mentally? Walk us through what that looks like.</label>
+                <textarea class="form-textarea" id="q1" name="q1" placeholder="Walk us through your process..."></textarea>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="q3">Which part of that workflow takes the most time?</label>
-                <select class="form-select" id="q3" name="q3">
-                  <option value="" disabled selected>Select one</option>
-                  <option>Writing and organizing practices</option>
-                  <option>Managing athlete information</option>
-                  <option>Communicating with swimmers</option>
-                  <option>Communicating with assistant coaches</option>
-                  <option>Meet planning and lineups</option>
-                  <option>Administrative or reporting tasks</option>
-                  <option>Other</option>
-                </select>
-                <div class="other-input-group" id="q3-other-group" style="display:none">
-                  <input class="form-input" type="text" id="q3_other" name="q3_other"
-                    placeholder="Please describe..." />
-                </div>
+                <label class="form-label" for="q2">Has an athlete ever surprised you mid-practice or at a meet with fatigue, injury, or a mental block you didn't see coming? What happened?</label>
+                <textarea class="form-textarea" id="q2" name="q2" placeholder="Tell us the story..."></textarea>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="q4">Which part causes you the most stress?</label>
-                <select class="form-select" id="q4" name="q4">
-                  <option value="" disabled selected>Select one</option>
-                  <option>Writing and organizing practices</option>
-                  <option>Managing athlete information</option>
-                  <option>Communicating with swimmers</option>
-                  <option>Communicating with assistant coaches</option>
-                  <option>Meet planning and lineups</option>
-                  <option>Administrative or reporting tasks</option>
-                  <option>Other</option>
-                </select>
-                <div class="other-input-group" id="q4-other-group" style="display:none">
-                  <input class="form-input" type="text" id="q4_other" name="q4_other"
-                    placeholder="Please describe..." />
-                </div>
-              </div>
-            </div>
-
-            <!-- ── Section 2: Your Current Tools ────────────── -->
-            <div class="form-section">
-              <span class="form-section-label">Section 2 — Your Current Tools</span>
-
-              <div class="form-group">
-                <label class="form-label">What software or tools do you currently use for coaching?</label>
-                <div class="check-group" id="q5-group">
-                  <label class="check-item">
-                    <input type="checkbox" name="q5" value="TeamUnify" />
-                    <span>TeamUnify</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q5" value="Commit Swimming" />
-                    <span>Commit Swimming</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q5" value="Excel or Google Sheets" />
-                    <span>Excel or Google Sheets</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q5" value="Google Docs" />
-                    <span>Google Docs</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q5" value="GroupMe or iMessage" />
-                    <span>GroupMe or iMessage</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q5" value="Nothing formal" />
-                    <span>Nothing formal</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q5" value="Other" />
-                    <span>Other</span>
-                  </label>
-                </div>
-              </div>
-
-              <!-- Q6: Per-tool follow-ups, revealed by Q5 -->
-              <div id="q6-followups">
-
-                <div class="tool-followup" id="followup-TeamUnify" style="display:none">
-                  <div class="tool-followup-title">TeamUnify</div>
-                  <div class="form-group">
-                    <label class="form-label">What do you like about it?</label>
-                    <input class="form-input" type="text" name="q6_TeamUnify_usedFor" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">What do you wish it did better?</label>
-                    <input class="form-input" type="text" name="q6_TeamUnify_limitation" />
-                  </div>
-                </div>
-
-                <div class="tool-followup" id="followup-Commit Swimming" style="display:none">
-                  <div class="tool-followup-title">Commit Swimming</div>
-                  <div class="form-group">
-                    <label class="form-label">What do you like about it?</label>
-                    <input class="form-input" type="text" name="q6_CommitSwimming_usedFor" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">What do you wish it did better?</label>
-                    <input class="form-input" type="text" name="q6_CommitSwimming_limitation" />
-                  </div>
-                </div>
-
-                <div class="tool-followup" id="followup-Excel or Google Sheets" style="display:none">
-                  <div class="tool-followup-title">Excel or Google Sheets</div>
-                  <div class="form-group">
-                    <label class="form-label">What do you like about it?</label>
-                    <input class="form-input" type="text" name="q6_Sheets_usedFor" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">What do you wish it did better?</label>
-                    <input class="form-input" type="text" name="q6_Sheets_limitation" />
-                  </div>
-                </div>
-
-                <div class="tool-followup" id="followup-Google Docs" style="display:none">
-                  <div class="tool-followup-title">Google Docs</div>
-                  <div class="form-group">
-                    <label class="form-label">What do you like about it?</label>
-                    <input class="form-input" type="text" name="q6_GoogleDocs_usedFor" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">What do you wish it did better?</label>
-                    <input class="form-input" type="text" name="q6_GoogleDocs_limitation" />
-                  </div>
-                </div>
-
-                <div class="tool-followup" id="followup-GroupMe or iMessage" style="display:none">
-                  <div class="tool-followup-title">GroupMe or iMessage</div>
-                  <div class="form-group">
-                    <label class="form-label">What do you like about it?</label>
-                    <input class="form-input" type="text" name="q6_GroupMe_usedFor" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">What do you wish it did better?</label>
-                    <input class="form-input" type="text" name="q6_GroupMe_limitation" />
-                  </div>
-                </div>
-
-                <div class="tool-followup" id="followup-Nothing formal" style="display:none">
-                  <div class="tool-followup-title">Nothing formal</div>
-                  <div class="form-group">
-                    <label class="form-label">What do you like about it?</label>
-                    <input class="form-input" type="text" name="q6_NothingFormal_usedFor" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">What do you wish it did better?</label>
-                    <input class="form-input" type="text" name="q6_NothingFormal_limitation" />
-                  </div>
-                </div>
-
-                <div class="tool-followup" id="followup-Other" style="display:none">
-                  <div class="tool-followup-title">Other</div>
-                  <div class="form-group">
-                    <label class="form-label">What do you like about it?</label>
-                    <input class="form-input" type="text" name="q6_Other_usedFor" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">What do you wish it did better?</label>
-                    <input class="form-input" type="text" name="q6_Other_limitation" />
-                  </div>
-                </div>
-
-              </div>
-
-              <div class="form-group" style="margin-top:32px">
-                <label class="form-label" for="q7">Is there one tool you genuinely couldn't coach without right now?
-                  Which one and why?</label>
-                <textarea class="form-textarea" id="q7" name="q7"></textarea>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="q8">If you could replace all your current tools with one platform that
-                  did everything well, what would be the three things it absolutely had to nail?</label>
-                <textarea class="form-textarea" id="q8" name="q8"></textarea>
-              </div>
-            </div>
-
-            <!-- ── Section 3: The Friction Inventory ─────────── -->
-            <div class="form-section">
-              <span class="form-section-label">Section 3 — The Friction Inventory</span>
-
-              <div class="form-group">
-                <label class="form-label">Where do you feel the most friction in your day-to-day coaching? Select your
-                  top 3.</label>
-                <div class="check-group" id="q9-group">
-                  <label class="check-item">
-                    <input type="checkbox" name="q9" value="Writing and organizing practice plans" />
-                    <span>Writing and organizing practice plans</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q9" value="Tracking swimmer performance and yardage over time" />
-                    <span>Tracking swimmer performance and yardage over time</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q9" value="Managing attendance" />
-                    <span>Managing attendance</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q9" value="Communicating with swimmers" />
-                    <span>Communicating with swimmers</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q9" value="Communicating with assistant coaches" />
-                    <span>Communicating with assistant coaches</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q9" value="Meet planning and lineup decisions" />
-                    <span>Meet planning and lineup decisions</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q9" value="Giving individual feedback to athletes" />
-                    <span>Giving individual feedback to athletes</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q9" value="Recruiting and roster management" />
-                    <span>Recruiting and roster management</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q9" value="Reporting to administration" />
-                    <span>Reporting to administration</span>
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="q9" value="Other" id="q9-other-cb" />
-                    <span>Other</span>
-                  </label>
-                </div>
-                <p class="max-select-msg" id="q9-max-msg">Max 3 selected</p>
-                <div class="other-input-group" id="q9-other-group" style="display:none">
-                  <input class="form-input" type="text" id="q9_other" name="q9_other"
-                    placeholder="Please describe..." />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Has a swimmer ever surprised you mid-practice with fatigue, injury, or an
-                  issue that could have been flagged earlier?</label>
+                <label class="form-label">How often do you feel like you have a clear picture of how your training is affecting your athletes individually?</label>
                 <div class="radio-group">
                   <label class="radio-item">
-                    <input type="radio" name="q10" value="Yes" />
-                    <span>Yes</span>
+                    <input type="radio" name="q3" value="Almost always — I read my athletes well" />
+                    <span>Almost always — I read my athletes well</span>
                   </label>
                   <label class="radio-item">
-                    <input type="radio" name="q10" value="No" />
-                    <span>No</span>
+                    <input type="radio" name="q3" value="Sometimes — the ones who speak up" />
+                    <span>Sometimes — the ones who speak up</span>
                   </label>
                   <label class="radio-item">
-                    <input type="radio" name="q10" value="Sometimes" />
-                    <span>Sometimes</span>
+                    <input type="radio" name="q3" value="Rarely — most athletes don't say much" />
+                    <span>Rarely — most athletes don't say much</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q3" value="Almost never — it's mostly guesswork" />
+                    <span>Almost never — it's mostly guesswork</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Section 2: The Concept ─────────────────────── -->
+            <div class="form-section">
+              <span class="form-section-label">Section 2 — The Concept</span>
+
+              <p class="testing-description" style="margin-bottom:32px">Deckside gives athletes a place to log how they felt after practice, track their own yardage and progress, and send their coach a quick check-in. Coaches see a real-time dashboard of how their athletes are responding to training — not after a bad meet, but practice by practice.</p>
+
+              <div class="form-group">
+                <label class="form-label">If you had consistent check-ins from your athletes after each practice, would it change how you write the next one?</label>
+                <div class="radio-group">
+                  <label class="radio-item">
+                    <input type="radio" name="q4" value="Yes, significantly" />
+                    <span>Yes, significantly</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q4" value="Probably for some athletes" />
+                    <span>Probably for some athletes</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q4" value="Maybe — I'd need to see it in action" />
+                    <span>Maybe — I'd need to see it in action</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q4" value="No — I already have what I need" />
+                    <span>No — I already have what I need</span>
                   </label>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="q11">How much of your practice plan do you typically share with swimmers
-                  in advance?</label>
-                <select class="form-select" id="q11" name="q11">
-                  <option value="" disabled selected>Select one</option>
-                  <option>Nothing — they find out on the deck</option>
-                  <option>General focus or theme only</option>
-                  <option>Rough yardage and structure</option>
-                  <option>Full practice details</option>
-                  <option>It varies</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- ── Section 4: Unmet Needs ─────────────────────── -->
-            <div class="form-section">
-              <span class="form-section-label">Section 4 — Unmet Needs</span>
-
-              <div class="form-group form-group--spacious">
-                <label class="form-label" for="q12">If you could fix one thing about how you currently coach —
-                  operationally — what would it be?</label>
-                <textarea class="form-textarea" id="q12" name="q12"></textarea>
+                <label class="form-label" for="q5">What information from your athletes, if you had it consistently, would most change how you coach?</label>
+                <textarea class="form-textarea" id="q5" name="q5" placeholder="Be as specific as you'd like..."></textarea>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="q13">Is there a tool or feature you've always wished existed?</label>
-                <textarea class="form-textarea" id="q13" name="q13"></textarea>
+                <label class="form-label">How open are you to adding a new tool to your workflow if it meaningfully improved athlete communication and feedback?</label>
+                <div class="radio-group">
+                  <label class="radio-item">
+                    <input type="radio" name="q6" value="Very open — always looking for better ways" />
+                    <span>Very open — always looking for better ways</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q6" value="Open if it's simple and doesn't add admin burden" />
+                    <span>Open if it's simple and doesn't add admin burden</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q6" value="Skeptical — I've tried tools that didn't stick" />
+                    <span>Skeptical — I've tried tools that didn't stick</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="q6" value="Not looking to change anything right now" />
+                    <span>Not looking to change anything right now</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="q6b">Your practice planning workflow is probably already working. What would a new platform have to do to earn the right to replace it?</label>
+                <textarea class="form-textarea" id="q6b" name="q6b" placeholder="What would have to be true..."></textarea>
               </div>
             </div>
 
-            <!-- ── Section 5: About You ───────────────────────── -->
+            <!-- ── Section 3: About You ───────────────────────── -->
             <div class="form-section">
-              <span class="form-section-label">Section 5 — About You</span>
+              <span class="form-section-label">Section 3 — About You</span>
 
               <div class="form-group">
-                <label class="form-label">What level do you coach?</label>
+                <label class="form-label">What level do you coach? (Select all that apply)</label>
                 <div class="check-group">
                   <label class="check-item">
-                    <input type="checkbox" name="q14" value="Club" />
+                    <input type="checkbox" name="q7a" value="Club" />
                     <span>Club</span>
                   </label>
                   <label class="check-item">
-                    <input type="checkbox" name="q14" value="High School" />
+                    <input type="checkbox" name="q7a" value="High School" />
                     <span>High School</span>
                   </label>
                   <label class="check-item">
-                    <input type="checkbox" name="q14" value="Collegiate D1" />
+                    <input type="checkbox" name="q7a" value="Collegiate D1" />
                     <span>Collegiate D1</span>
                   </label>
                   <label class="check-item">
-                    <input type="checkbox" name="q14" value="Collegiate D2" />
+                    <input type="checkbox" name="q7a" value="Collegiate D2" />
                     <span>Collegiate D2</span>
                   </label>
                   <label class="check-item">
-                    <input type="checkbox" name="q14" value="Collegiate D3" />
+                    <input type="checkbox" name="q7a" value="Collegiate D3" />
                     <span>Collegiate D3</span>
                   </label>
                   <label class="check-item">
-                    <input type="checkbox" name="q14" value="Masters" />
+                    <input type="checkbox" name="q7a" value="Masters" />
                     <span>Masters</span>
                   </label>
                   <label class="check-item">
-                    <input type="checkbox" name="q14" value="Multiple" />
-                    <span>Multiple</span>
+                    <input type="checkbox" name="q7a" value="Summer League / YMCA" />
+                    <span>Summer League / YMCA</span>
                   </label>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="q15">How large is your roster?</label>
-                <select class="form-select" id="q15" name="q15">
+                <label class="form-label" for="q7b">How large is your roster?</label>
+                <select class="form-select" id="q7b" name="q7b">
                   <option value="" disabled selected>Select one</option>
                   <option>Under 20</option>
                   <option>20–40</option>
@@ -1147,8 +942,8 @@
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="q16">How many years have you been coaching?</label>
-                <select class="form-select" id="q16" name="q16">
+                <label class="form-label" for="q7c">How many years have you been coaching?</label>
+                <select class="form-select" id="q7c" name="q7c">
                   <option value="" disabled selected>Select one</option>
                   <option>0–2</option>
                   <option>3–7</option>
@@ -1158,45 +953,31 @@
               </div>
             </div>
 
-            <!-- ── Section 6: Stay Involved ──────────────────── -->
+            <!-- ── Section 4: Stay Involved ──────────────────── -->
             <div class="form-section">
-              <span class="form-section-label">Section 6 — Stay Involved</span>
+              <span class="form-section-label">Section 4 — Stay Involved</span>
 
               <div class="form-group">
-                <label class="form-label">Is this something you'd be interested in using for your program?</label>
-                <div class="radio-group" id="q17-group">
+                <label class="form-label">Is this something you'd want to follow as it gets built?</label>
+                <div class="radio-group" id="q8a-group">
                   <label class="radio-item">
-                    <input type="radio" name="q17" value="Yes" />
+                    <input type="radio" name="q8a" value="Yes" />
                     <span>Yes</span>
                   </label>
                   <label class="radio-item">
-                    <input type="radio" name="q17" value="Maybe" />
+                    <input type="radio" name="q8a" value="Maybe" />
                     <span>Maybe</span>
                   </label>
                   <label class="radio-item">
-                    <input type="radio" name="q17" value="No" />
+                    <input type="radio" name="q8a" value="No" />
                     <span>No</span>
                   </label>
                 </div>
               </div>
 
-              <div class="form-group">
-                <label class="form-label">Would you be open to being contacted when Deckside launches?</label>
-                <div class="radio-group" id="q18-group">
-                  <label class="radio-item">
-                    <input type="radio" name="q18" value="Yes" />
-                    <span>Yes</span>
-                  </label>
-                  <label class="radio-item">
-                    <input type="radio" name="q18" value="No" />
-                    <span>No</span>
-                  </label>
-                </div>
-              </div>
-
-              <div class="form-group" id="q19-group" style="display:none">
-                <label class="form-label" for="q19">Your email address</label>
-                <input class="form-input" type="email" id="q19" name="q19" placeholder="Your email address" />
+              <div class="form-group" id="q8b-group" style="display:none">
+                <label class="form-label" for="q8b">Your email — I'll reach out for a 15-minute follow-up conversation when the time is right. No spam.</label>
+                <input class="form-input" type="email" id="q8b" name="q8b" placeholder="your@email.com" />
               </div>
             </div>
 
@@ -1208,7 +989,7 @@
 
       </div>
 
-      <p class="survey-meta">Takes ~10 minutes · Completely anonymous</p>
+      <p class="survey-meta">Takes ~7 minutes · Anonymous unless you opt in</p>
     </div>
   </section>
 
@@ -1264,45 +1045,10 @@
       nav.classList.toggle('scrolled', window.scrollY > 20);
     });
 
-    // Q5 → Q6 dynamic follow-up rows
-    document.querySelectorAll('input[name="q5"]').forEach(cb => {
-      cb.addEventListener('change', () => {
-        const el = document.getElementById('followup-' + cb.value);
-        if (el) el.style.display = cb.checked ? 'block' : 'none';
-      });
-    });
-
-    // Q3 → reveal "Other" text input
-    document.getElementById('q3').addEventListener('change', function () {
-      document.getElementById('q3-other-group').style.display = this.value === 'Other' ? 'block' : 'none';
-    });
-
-    // Q4 → reveal "Other" text input
-    document.getElementById('q4').addEventListener('change', function () {
-      document.getElementById('q4-other-group').style.display = this.value === 'Other' ? 'block' : 'none';
-    });
-
-    // Q9 max 3 selections + "Other" text reveal
-    const q9boxes = document.querySelectorAll('input[name="q9"]');
-    const q9msg = document.getElementById('q9-max-msg');
-
-    q9boxes.forEach(cb => {
-      cb.addEventListener('change', () => {
-        const checked = Array.from(q9boxes).filter(c => c.checked).length;
-        q9msg.style.display = checked >= 3 ? 'block' : 'none';
-        q9boxes.forEach(c => {
-          if (!c.checked) c.disabled = checked >= 3;
-        });
-        if (cb.value === 'Other') {
-          document.getElementById('q9-other-group').style.display = cb.checked ? 'block' : 'none';
-        }
-      });
-    });
-
-    // Q18 → reveal Q19 email field
-    document.querySelectorAll('input[name="q18"]').forEach(radio => {
+    // Q8a → reveal Q8b email field
+    document.querySelectorAll('input[name="q8a"]').forEach(radio => {
       radio.addEventListener('change', () => {
-        document.getElementById('q19-group').style.display = radio.value === 'Yes' ? 'block' : 'none';
+        document.getElementById('q8b-group').style.display = radio.value === 'Yes' ? 'block' : 'none';
       });
     });
   </script>
@@ -1331,59 +1077,27 @@
     const getRadio = name => document.querySelector(`input[name="${name}"]:checked`)?.value ?? '';
     const getChecked = name => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
 
-    function getQ6Tools() {
-      const tools = {};
-      document.querySelectorAll('.tool-followup').forEach(el => {
-        if (el.style.display === 'none') return;
-        const title = el.querySelector('.tool-followup-title').textContent;
-        const likedEl = el.querySelector('[name$="_usedFor"]');
-        const wishEl = el.querySelector('[name$="_limitation"]');
-        tools[title] = {
-          liked: (likedEl?.value ?? '').trim(),
-          wishBetter: (wishEl?.value ?? '').trim(),
-        };
-      });
-      return tools;
-    }
-
     form.addEventListener('submit', async e => {
       e.preventDefault();
       submitBtn.disabled = true;
       submitBtn.textContent = 'Submitting…';
       formError.style.display = 'none';
 
-      const q3val = getSelect('q3');
-      const q4val = getSelect('q4');
-      const q3other = getVal('q3_other');
-      const q4other = getVal('q4_other');
-      const q9other = getVal('q9_other');
-      const q18val = getRadio('q18');
-
       try {
         await addDoc(collection(db, 'surveyResponses'), {
           timestamp: serverTimestamp(),
           q1: getVal('q1'),
           q2: getVal('q2'),
-          q3: q3val,
-          ...(q3val === 'Other' && q3other && { q3_other: q3other }),
-          q4: q4val,
-          ...(q4val === 'Other' && q4other && { q4_other: q4other }),
-          q5: getChecked('q5'),
-          q6_tools: getQ6Tools(),
-          q7: getVal('q7'),
-          q8: getVal('q8'),
-          q9_friction: getChecked('q9'),
-          ...(q9other && { q9_other: q9other }),
-          q10: getRadio('q10'),
-          q11: getSelect('q11'),
-          q12: getVal('q12'),
-          q13: getVal('q13'),
-          q14: getChecked('q14'),
-          q15: getSelect('q15'),
-          q16: getSelect('q16'),
-          q17: getRadio('q17'),
-          q18: q18val,
-          ...(q18val === 'Yes' && { q19: getVal('q19') }),
+          q3: getRadio('q3'),
+          q4: getRadio('q4'),
+          q5: getVal('q5'),
+          q6: getRadio('q6'),
+          q6b: getVal('q6b'),
+          q7a: getChecked('q7a'),
+          q7b: getSelect('q7b'),
+          q7c: getSelect('q7c'),
+          q8a: getRadio('q8a'),
+          ...(getRadio('q8a') === 'Yes' && { q8b: getVal('q8b') }),
         });
 
         embedWrap.innerHTML = `
