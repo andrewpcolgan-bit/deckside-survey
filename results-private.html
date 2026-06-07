@@ -828,10 +828,10 @@
 
     /* ── Open-ended tab config ──────────────────────────────── */
     const TABS = [
-      { id: 'q1', label: 'Q1', title: 'Feedback Loop' },
-      { id: 'q2_extra', label: 'Q2+', title: 'Confidence Notes' },
-      { id: 'q5', label: 'Q5', title: 'Coaching Information' },
-      { id: 'q7', label: 'Q7', title: 'Tool Frustrations' },
+      { id: 'q1',  label: 'Q1',  title: 'Feedback Loop' },
+      { id: 'q2b', label: 'Q2b', title: 'Confidence Notes' },
+      { id: 'q5',  label: 'Q5',  title: 'Coaching Information' },
+      { id: 'q6b', label: 'Q6b', title: 'Tool Frustrations' },
     ];
 
     /* ── Render entire dashboard ────────────────────────────── */
@@ -845,9 +845,9 @@
         : `${total} response${total !== 1 ? 's' : ''} · Last: ${fmt(latest)}`;
 
       /* ── Overview cards ─────────────────────────────────── */
-      const wantToFollow = docs.filter(d => d.q9_followup === 'Yes' || d.q9_followup === 'Maybe').length;
+      const wantToFollow = docs.filter(d => d.q8a === 'Yes' || d.q8a === 'Maybe').length;
       const confidentAware = docs.filter(d => d.q2 === 'Very confident — I pick up on it quickly' || d.q2 === 'Fairly confident — I catch most of it').length;
-      const emails = docs.filter(d => d.q9_email && d.q9_email.trim()).length;
+      const emails = docs.filter(d => d.q8b && d.q8b.trim()).length;
 
       $('overview-grid').innerHTML = [
         { label: 'Total Responses', value: total, sub: '&nbsp;' },
@@ -888,20 +888,20 @@
       const q6counts = countField(docs, 'q6');
       $('chart-q6').innerHTML = renderBars(q6counts);
 
-      /* ── Q8_level — Coaching level (multi-select) ────────── */
-      const q8levelCounts = countArrayField(docs, 'q8_level');
+      /* ── Q7a — Coaching level (multi-select) ────────────── */
+      const q8levelCounts = countArrayField(docs, 'q7a');
       $('chart-q8level').innerHTML = renderBars(q8levelCounts);
 
-      /* ── Q8_roster — Roster size ─────────────────────────── */
-      const q8rosterCounts = countField(docs, 'q8_roster');
+      /* ── Q7b — Roster size ───────────────────────────────── */
+      const q8rosterCounts = countField(docs, 'q7b');
       $('chart-q8roster').innerHTML = renderBars(q8rosterCounts);
 
-      /* ── Q8_years — Years coaching ───────────────────────── */
-      const q8yearsCounts = countField(docs, 'q8_years');
+      /* ── Q7c — Years coaching ────────────────────────────── */
+      const q8yearsCounts = countField(docs, 'q7c');
       $('chart-q8years').innerHTML = renderBars(q8yearsCounts);
 
-      /* ── Q9_followup — Want to follow ────────────────────── */
-      const q9followupCounts = countField(docs, 'q9_followup');
+      /* ── Q8a — Want to follow ────────────────────────────── */
+      const q9followupCounts = countField(docs, 'q8a');
       $('chart-q9followup').innerHTML = renderBarsQ17(q9followupCounts, total);
 
       /* ── Open-ended tabs ────────────────────────────────── */
@@ -942,12 +942,12 @@
       });
 
       /* ── Email table ────────────────────────────────────── */
-      const emailDocs = docs.filter(d => d.q9_email && d.q9_email.trim());
+      const emailDocs = docs.filter(d => d.q8b && d.q8b.trim());
       if (emailDocs.length) {
         $('email-section').style.display = '';
         $('email-tbody').innerHTML = emailDocs.map(d => `
           <tr>
-            <td>${escHtml(d.q9_email.trim())}</td>
+            <td>${escHtml(d.q8b.trim())}</td>
             <td>${fmtShort(d.timestamp)}</td>
           </tr>
         `).join('');
