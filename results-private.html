@@ -581,69 +581,91 @@
       <!-- Overview Cards -->
       <div class="overview-grid" id="overview-grid"></div>
 
-      <!-- Q3 + Q4 — Pain Points -->
+      <!-- Q2 + Q3 — Athlete Awareness -->
       <div class="two-col">
         <div class="section-block">
           <div class="section-header">
-            <div class="section-title">Most Time-Consuming</div>
-            <div class="section-subtitle">Q3 — Which part of your workflow takes the most time?</div>
+            <div class="section-title">Confidence in Athlete Awareness</div>
+            <div class="section-subtitle">Q2 — How confident are you that you'd know if an athlete was struggling?</div>
+          </div>
+          <div class="section-body">
+            <div class="bar-list" id="chart-q2"></div>
+          </div>
+        </div>
+        <div class="section-block">
+          <div class="section-header">
+            <div class="section-title">Clarity on Training Impact</div>
+            <div class="section-subtitle">Q3 — How often do you have a clear picture of how training affects athletes individually?</div>
           </div>
           <div class="section-body">
             <div class="bar-list" id="chart-q3"></div>
           </div>
         </div>
+      </div>
+
+      <!-- Q4 + Q6 — Concept Reception -->
+      <div class="two-col">
         <div class="section-block">
           <div class="section-header">
-            <div class="section-title">Most Stressful</div>
-            <div class="section-subtitle">Q4 — Which part causes you the most stress?</div>
+            <div class="section-title">Would Check-ins Change Practice?</div>
+            <div class="section-subtitle">Q4 — If you had consistent check-ins, would it change how you write the next practice?</div>
           </div>
           <div class="section-body">
             <div class="bar-list" id="chart-q4"></div>
           </div>
         </div>
+        <div class="section-block">
+          <div class="section-header">
+            <div class="section-title">Openness to New Tools</div>
+            <div class="section-subtitle">Q6 — How open are you to adding a new tool if it improved athlete communication?</div>
+          </div>
+          <div class="section-body">
+            <div class="bar-list" id="chart-q6"></div>
+          </div>
+        </div>
       </div>
 
-      <!-- Q5 — Current Tools -->
+      <!-- Q8_level — Coaching Level -->
       <div class="section-block">
         <div class="section-header">
-          <div class="section-title">Current Tools</div>
-          <div class="section-subtitle">Q5 — What software or tools do you currently use for coaching?</div>
+          <div class="section-title">Coaching Level</div>
+          <div class="section-subtitle">Q8 — What level do you coach? (multi-select)</div>
         </div>
         <div class="section-body">
-          <div class="bar-list" id="chart-q5"></div>
+          <div class="bar-list" id="chart-q8level"></div>
         </div>
       </div>
 
-      <!-- Q9 — Friction Inventory -->
-      <div class="section-block">
-        <div class="section-header">
-          <div class="section-title">Friction Inventory</div>
-          <div class="section-subtitle">Q9 — Where do you feel the most friction? (top 3 per coach)</div>
-        </div>
-        <div class="section-body">
-          <div class="bar-list" id="chart-q9"></div>
-        </div>
-      </div>
-
-      <!-- Q17 + Q18 — Purchase Intent -->
+      <!-- Q8_roster + Q8_years — Demographics -->
       <div class="two-col">
         <div class="section-block">
           <div class="section-header">
-            <div class="section-title">Would Use Deckside</div>
-            <div class="section-subtitle">Q17 — Interested in using it for their program?</div>
+            <div class="section-title">Roster Size</div>
+            <div class="section-subtitle">Q8 — How large is your roster?</div>
           </div>
           <div class="section-body">
-            <div class="bar-list" id="chart-q17"></div>
+            <div class="bar-list" id="chart-q8roster"></div>
           </div>
         </div>
         <div class="section-block">
           <div class="section-header">
-            <div class="section-title">Open to Contact at Launch</div>
-            <div class="section-subtitle">Q18 — Open to being contacted when Deckside launches?</div>
+            <div class="section-title">Years Coaching</div>
+            <div class="section-subtitle">Q8 — How many years have you been coaching?</div>
           </div>
           <div class="section-body">
-            <div class="bar-list" id="chart-q18"></div>
+            <div class="bar-list" id="chart-q8years"></div>
           </div>
+        </div>
+      </div>
+
+      <!-- Q9_followup — Want to Follow -->
+      <div class="section-block">
+        <div class="section-header">
+          <div class="section-title">Want to Follow Along</div>
+          <div class="section-subtitle">Q9 — Is this something you'd want to follow as it gets built?</div>
+        </div>
+        <div class="section-body">
+          <div class="bar-list" id="chart-q9followup"></div>
         </div>
       </div>
 
@@ -660,7 +682,7 @@
       <div class="section-block" id="email-section" style="display:none">
         <div class="section-header">
           <div class="section-title">Emails Collected</div>
-          <div class="section-subtitle">Q19 — Coaches who want to be contacted at launch</div>
+          <div class="section-subtitle">Coaches who want to stay in the loop</div>
         </div>
         <div class="section-body">
           <table class="email-table" id="email-table">
@@ -778,15 +800,38 @@
       }).join('');
     }
 
+    /* ── Ordered bar chart renderer (fixed option order with per-slot colors) */
+    function renderBarsOrdered(counts, orderedOptions, total) {
+      const entries = orderedOptions
+        .filter(([label]) => counts[label] !== undefined)
+        .concat(
+          Object.keys(counts)
+            .filter(k => !orderedOptions.find(([l]) => l === k))
+            .map(k => [k, ''])
+        )
+        .map(([label, colorClass]) => [label, colorClass, counts[label] || 0]);
+
+      if (!entries.length) return '<p class="empty-state">No responses yet.</p>';
+      const max = Math.max(...entries.map(e => e[2]));
+      return entries.map(([label, colorClass, count]) => {
+        const w = max > 0 ? (count / max) * 100 : 0;
+        return `
+          <div class="bar-row">
+            <div class="bar-label">${label} <span style="color:var(--gray);font-weight:400">${pct(count, total)}</span></div>
+            <div class="bar-track">
+              <div class="bar-fill ${colorClass}" style="width:${w}%"></div>
+            </div>
+            <div class="bar-count">${count}</div>
+          </div>`;
+      }).join('');
+    }
+
     /* ── Open-ended tab config ──────────────────────────────── */
     const TABS = [
-      { id: 'q1', label: 'Q1', title: 'Practice Planning' },
-      { id: 'q2', label: 'Q2', title: 'Day Workflow' },
-      { id: 'q7', label: 'Q7', title: 'Essential Tool' },
-      { id: 'q8', label: 'Q8', title: 'Platform Needs' },
-      { id: 'q11', label: 'Q11', title: 'Practice Sharing' },
-      { id: 'q12', label: 'Q12', title: 'Fix One Thing' },
-      { id: 'q13', label: 'Q13', title: 'Wish List' },
+      { id: 'q1', label: 'Q1', title: 'Feedback Loop' },
+      { id: 'q2_extra', label: 'Q2+', title: 'Confidence Notes' },
+      { id: 'q5', label: 'Q5', title: 'Coaching Information' },
+      { id: 'q7', label: 'Q7', title: 'Tool Frustrations' },
     ];
 
     /* ── Render entire dashboard ────────────────────────────── */
@@ -800,14 +845,14 @@
         : `${total} response${total !== 1 ? 's' : ''} · Last: ${fmt(latest)}`;
 
       /* ── Overview cards ─────────────────────────────────── */
-      const wantToUse = docs.filter(d => d.q17 === 'Yes' || d.q17 === 'Maybe').length;
-      const openContact = docs.filter(d => d.q18 === 'Yes').length;
-      const emails = docs.filter(d => d.q19 && d.q19.trim()).length;
+      const wantToFollow = docs.filter(d => d.q9_followup === 'Yes' || d.q9_followup === 'Maybe').length;
+      const confidentAware = docs.filter(d => d.q2 === 'Very confident — I pick up on it quickly' || d.q2 === 'Fairly confident — I catch most of it').length;
+      const emails = docs.filter(d => d.q9_email && d.q9_email.trim()).length;
 
       $('overview-grid').innerHTML = [
         { label: 'Total Responses', value: total, sub: '&nbsp;' },
-        { label: 'Want to Use', value: wantToUse, sub: total ? `${pct(wantToUse, total)} answered Yes or Maybe` : '—' },
-        { label: 'Open to Contact', value: openContact, sub: total ? `${pct(openContact, total)} said Yes on Q18` : '—' },
+        { label: 'Want to Follow', value: wantToFollow, sub: total ? `${pct(wantToFollow, total)} answered Yes or Maybe` : '—' },
+        { label: 'Confident in Athlete Awareness', value: confidentAware, sub: total ? `${pct(confidentAware, total)} said Very or Fairly confident` : '—' },
         { label: 'Emails Collected', value: emails, sub: emails ? 'in the email list below' : 'none yet' },
       ].map(c => `
         <div class="card">
@@ -817,25 +862,47 @@
         </div>
       `).join('');
 
-      /* ── Q3 & Q4 charts ─────────────────────────────────── */
+      /* ── Q2 — Confidence in athlete awareness ───────────── */
+      const q2counts = countField(docs, 'q2');
+      $('chart-q2').innerHTML = renderBarsOrdered(q2counts, [
+        ['Very confident — I pick up on it quickly', 'green'],
+        ['Fairly confident — I catch most of it', 'amber'],
+        ['Somewhat — I probably miss things', 'muted'],
+        ['Honestly, not very — it usually catches me off guard', 'muted'],
+      ], total);
+
+      /* ── Q3 — Clarity on training impact ────────────────── */
       const q3counts = countField(docs, 'q3');
+      $('chart-q3').innerHTML = renderBarsOrdered(q3counts, [
+        ['Almost always — I read my athletes well', 'green'],
+        ['Sometimes — the ones who speak up', 'amber'],
+        ['Rarely — most athletes don\'t say much', 'muted'],
+        ['Almost never — it\'s mostly guesswork', 'muted'],
+      ], total);
+
+      /* ── Q4 — Would check-ins change practice? ───────────── */
       const q4counts = countField(docs, 'q4');
-      $('chart-q3').innerHTML = renderBars(q3counts);
       $('chart-q4').innerHTML = renderBars(q4counts);
 
-      /* ── Q5 tools ───────────────────────────────────────── */
-      const q5counts = countArrayField(docs, 'q5');
-      $('chart-q5').innerHTML = renderBars(q5counts);
+      /* ── Q6 — Openness to new tools ─────────────────────── */
+      const q6counts = countField(docs, 'q6');
+      $('chart-q6').innerHTML = renderBars(q6counts);
 
-      /* ── Q9 friction ────────────────────────────────────── */
-      const q9counts = countArrayField(docs, 'q9_friction');
-      $('chart-q9').innerHTML = renderBars(q9counts);
+      /* ── Q8_level — Coaching level (multi-select) ────────── */
+      const q8levelCounts = countArrayField(docs, 'q8_level');
+      $('chart-q8level').innerHTML = renderBars(q8levelCounts);
 
-      /* ── Q17 & Q18 intent ───────────────────────────────── */
-      const q17counts = countField(docs, 'q17');
-      const q18counts = countField(docs, 'q18');
-      $('chart-q17').innerHTML = renderBarsQ17(q17counts, total);
-      $('chart-q18').innerHTML = renderBarsQ17(q18counts, total);
+      /* ── Q8_roster — Roster size ─────────────────────────── */
+      const q8rosterCounts = countField(docs, 'q8_roster');
+      $('chart-q8roster').innerHTML = renderBars(q8rosterCounts);
+
+      /* ── Q8_years — Years coaching ───────────────────────── */
+      const q8yearsCounts = countField(docs, 'q8_years');
+      $('chart-q8years').innerHTML = renderBars(q8yearsCounts);
+
+      /* ── Q9_followup — Want to follow ────────────────────── */
+      const q9followupCounts = countField(docs, 'q9_followup');
+      $('chart-q9followup').innerHTML = renderBarsQ17(q9followupCounts, total);
 
       /* ── Open-ended tabs ────────────────────────────────── */
       const tabNav = $('tab-nav');
@@ -875,12 +942,12 @@
       });
 
       /* ── Email table ────────────────────────────────────── */
-      const emailDocs = docs.filter(d => d.q19 && d.q19.trim());
+      const emailDocs = docs.filter(d => d.q9_email && d.q9_email.trim());
       if (emailDocs.length) {
         $('email-section').style.display = '';
         $('email-tbody').innerHTML = emailDocs.map(d => `
           <tr>
-            <td>${escHtml(d.q19.trim())}</td>
+            <td>${escHtml(d.q9_email.trim())}</td>
             <td>${fmtShort(d.timestamp)}</td>
           </tr>
         `).join('');
